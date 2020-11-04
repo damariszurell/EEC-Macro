@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Global species data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Macroecology</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Course schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R practicals
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_Intro.html">1. Introduction to R</a>
+    </li>
+    <li>
+      <a href="2_SpatialData.html">2. Spatial data in R</a>
+    </li>
+    <li>
+      <a href="3_RichnessGradients.html">3. Species richness gradients</a>
+    </li>
+    <li>
+      <a href="4_SpeciesData.html">4. Global species data</a>
+    </li>
+    <li>
+      <a href="5_SpeciesThreats.html">5. Species threats</a>
+    </li>
+    <li>
+      <a href="6_BiodivChanges.html">6. Analysing biodiversity changes</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:damaris@zurell.de">
+    <span class="fa fa-envelope"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://damariszurell.github.io">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/ZurellLab">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Global species data</h1>
+
+</div>
+
+
+<hr />
+<div class="alert alert-info">
+<p><strong>RStudio project</strong></p>
+<p>Open the RStudio project that we created in the first session. I recommend to use this RStudio project for the entire course and within the RStudio project create separate R scripts for each session.</p>
+<ul>
+<li>Create a new empty R script by going to the tab “File”, select “New File” and then “R script”</li>
+<li>In the new R script, type <code># Session 4: Global species data</code> and save the file in your folder “scripts” within your project folder, e.g. as “4_SpeciesData.R”</li>
+</ul>
+</div>
+<p>We are living in an age of big data where biodiversity are becoming increasingly available in digital format and at a global scale <span class="citation">(Wüest et al. 2019)</span>. Many different types of biodiversity data exist, e.g. from standardised monitoring schemes, citizen science platforms, or expert knowledge. Each of these data types comes with own challenges. Here, we simply want to learn how we can obtain and process typical types of species data. Specifically, we will work with range maps of terrestrial animals and plants, and with occurrence data for terrestrial species in <a href="https://www.gbif.org/">GBIF</a>(the Global Biodiversity Information facility) and for marine species in <a href="https://obis.org/">OBIS</a>(the Ocean Biodiversity Information System).</p>
+<div id="range-maps" class="section level1">
+<h1><span class="header-section-number">1</span> Range maps</h1>
+<p>We rarely have detailed biodiversity data available over large geographic extents. At broad (continental to global) extents, expert-drawn range maps (also called extent-of-occurrence maps) are often the primary data source on species distributions.</p>
+<div id="iucn-range-maps" class="section level2">
+<h2><span class="header-section-number">1.1</span> IUCN range maps</h2>
+<p>The IUCN (the International Union for the Conservation of Nature) provides expert range maps for a large number of species including mammals, birds (through <a href="http://www.birdlife.org/">BirdLife International</a>), amphibians, reptiles, and freshwater fishes. There are also some range maps on plants and marine species, but these are very limited taxonomically. Have a look for which taxa range maps are available: <a href="https://www.iucnredlist.org/resources/spatial-data-download" class="uri">https://www.iucnredlist.org/resources/spatial-data-download</a>. You can download them for free, but you should provide some information on your work to obtain the data.</p>
+<p>Most of the IUCN data are provided in the form of shapefiles. In practical 2, we have already loaded the range map of the <a href="https://damariszurell.github.io/EEC-Macro/data/IUCN_Sorex_alpinus.zip">Alpine shrew</a> and learned how ti use the package <code>raster</code> for reading in the shapefiles. You may remember that the shapefile is recognized as SpatialPolygonsDataFrame.</p>
+<pre class="r"><code>library(raster)</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre class="r"><code># Load the shapefile
+(shrew &lt;- shapefile(&#39;data/IUCN_Sorex_alpinus.shp&#39;))</code></pre>
+<pre><code>## class       : SpatialPolygonsDataFrame 
+## features    : 1 
+## extent      : 5.733728, 26.67935, 42.20601, 51.89984  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs 
+## variables   : 27
+## names       : id_no,      binomial, presence, origin, seasonal, compiler, yrcompiled,                                              citation, source, dist_comm, island, subspecies, subpop,            legend, tax_comm, ... 
+## value       : 29660, Sorex alpinus,        1,      1,        1,     IUCN,       2008, IUCN (International Union for Conservation of Nature),     NA,        NA,     NA,         NA,     NA, Extant (resident),       NA, ...</code></pre>
+<pre class="r"><code># Plot the Central Europe
+library(maps)
+map(&#39;world&#39;,xlim=c(5,30), ylim=c(40,55))
+
+# Overlay the range of the Alpine Shrew
+plot(shrew, col=&#39;red&#39;, add=T)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="bien-range-maps" class="section level2">
+<h2><span class="header-section-number">1.2</span> BIEN range maps</h2>
+<p>The <a href="https://bien.nceas.ucsb.edu/bien/biendata/">BIEN</a> database (Botanical Information and Ecology Network) contains many range maps on plants, but unfortunately only for the Americas. These can be accessed using the <code>BIEN</code> package. As illustrative example, we load the range map for the monkey puzzle tree (or Chilean pine - <em>Araucaria araucana</em>).</p>
+<pre class="r"><code>library(BIEN)</code></pre>
+<pre><code>## Loading required package: RPostgreSQL</code></pre>
+<pre><code>## Loading required package: DBI</code></pre>
+<pre><code>## Type vignette(&quot;BIEN&quot;) or vignette(&quot;BIEN_tutorial&quot;) to get started</code></pre>
+<pre><code>## </code></pre>
+<pre class="r"><code>library(sp)
+
+# Load the range map for the monkey puzzle
+(monkey_puzzle &lt;- BIEN_ranges_load_species(&#39;Araucaria_araucana&#39;))</code></pre>
+<pre><code>## class       : SpatialPolygonsDataFrame 
+## features    : 1 
+## extent      : -109.9819, -55.46083, -55.73974, 62.67197  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs 
+## variables   : 1
+## names       :            species 
+## value       : Araucaria_araucana</code></pre>
+<pre class="r"><code># Map
+map(&#39;world&#39;,xlim = c(-180,-20),ylim = c(-60,80))
+plot(monkey_puzzle,col=&#39;red&#39;,add=T)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>The native range of the mokey puzzle is in the Chilean Andes, so clearly the range maps also show areas where the species naturalized.</p>
+</div>
+<div id="range-size-and-range-centre" class="section level2">
+<h2><span class="header-section-number">1.3</span> Range size and range centre</h2>
+<p>The <code>raster</code> package allows us to easily calculate the area of the polygons, meaning the range size of our species. The function <code>area()</code> outputs the area in square meters (if the CRS is in long/lat format).</p>
+<pre class="r"><code># Range area of alpine shrew in square meters:
+area(shrew)</code></pre>
+<pre><code>## [1] 490543310097</code></pre>
+<pre class="r"><code># Range area of alpine shrew in square kilometers:
+area(shrew)/1000000</code></pre>
+<pre><code>## [1] 490543.3</code></pre>
+<pre class="r"><code># Range area of monkey puzzle in square meters:
+area(monkey_puzzle)</code></pre>
+<pre><code>## [1] 5.783633e+12</code></pre>
+<pre class="r"><code># Range area of monkey puzzle n square kilometers:
+area(monkey_puzzle)/1000000</code></pre>
+<pre><code>## [1] 5783633</code></pre>
+<p>We can also very easily calculate the centre of gravity or range centroid from the spatial polygons.</p>
+<pre class="r"><code>library(rgeos)</code></pre>
+<pre><code>## rgeos version: 0.5-3, (SVN revision 634)
+##  GEOS runtime version: 3.8.1-CAPI-1.13.3 
+##  Linking to sp version: 1.4-2 
+##  Polygon checking: TRUE</code></pre>
+<pre class="r"><code># Range centroid:
+gCentroid(shrew)</code></pre>
+<pre><code>## class       : SpatialPoints 
+## features    : 1 
+## extent      : 16.02645, 16.02645, 46.90336, 46.90336  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<pre class="r"><code># Map the species range and add the centroid to the map
+map(&#39;world&#39;,xlim=c(5,30), ylim=c(40,55))
+plot(shrew, col=&#39;red&#39;, add=T)
+plot(gCentroid(shrew), col=&#39;blue&#39;,add=T,lwd=3)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We need to be careful how to interpret these centroids. They represent the centre of gravity, so losely the mean coordinates of the distribution (weighted by cell size) but obviously, if we have several patches, the centroid might not even fall within an occupied patch.</p>
+<p>In case of the Monkey Puzzle, we have suspected that the range maps also contain non-native areas. We can clip the range maps to a desired spatial extent and then only calculate the range centroid for this (presumed) native range.</p>
+<pre class="r"><code># Let&#39;s crop the range polygons to South America
+monkey_puzzle_SAm &lt;- gIntersection(monkey_puzzle, as(extent(-85, -30, -55, 5),&quot;SpatialPolygons&quot;))
+
+# Map the range and range centroid
+map(&#39;world&#39;,xlim = c(-100,-10),ylim = c(-60,15))
+plot(monkey_puzzle_SAm,col=&#39;red&#39;,add=T)
+plot(gCentroid(monkey_puzzle_SAm), col=&#39;blue&#39;,add=T,lwd=3)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="rasterize-range-maps" class="section level2">
+<h2><span class="header-section-number">1.4</span> Rasterize range maps</h2>
+<p>For many applications in macroecology, we need to rasterize the polygons. The problem is that it is unclear at which spatial resolution the range maps accurately represent species occurrences. <span class="citation">Hurlbert and Jetz (2007)</span> and <span class="citation">Jetz, McPherson, and Guralnick (2012)</span> define the minimum spatial resolution as 100-200km (1-2°), although also resolutions of 50km (0.5°) and finer have been used <span class="citation">(Krosby et al. 2015)</span>.</p>
+<p>Rasterizing polgyon data is made very easy in the <em>raster</em> package. We first have to define a raster grid of the desired resolution, and then transfer the polgyon data to the raster cells.</p>
+<pre class="r"><code># By default, raster() will create a 1° resolution map in the *WGS 84* coordinate system (lon/lat).
+(r_1deg &lt;- raster())</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 180, 360, 64800  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<pre class="r"><code>(shrew_1deg &lt;- rasterize(shrew, r_1deg))</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 180, 360, 64800  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : memory
+## names      : layer 
+## values     : 1, 1  (min, max)
+## attributes :
+##  ID id_no      binomial presence origin seasonal compiler yrcompiled
+##   1 29660 Sorex alpinus        1      1        1     IUCN       2008
+##                                               citation source dist_comm island
+##  IUCN (International Union for Conservation of Nature)   &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt;</code></pre>
+<pre class="r"><code>map(&#39;world&#39;,xlim=c(5,30), ylim=c(40,55))
+plot(shrew, col=&#39;red&#39;, add=T)
+plot(shrew_1deg, add=T, alpha=0.6, legend=F)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Obviously, the margins of the range polgyon and the raster map differ at several places. What rule is being used to determine whether polygon data is transferred to a raster cell? Check out the help page <code>?rasterize</code> to find out.</p>
+<p>There are also newer macroecological packages in R that facilitate working with range maps and rasterising them, for example the function <code>lets.presab()</code> in the <code>letsR</code> package.</p>
+<pre class="r"><code>library(letsR)
+
+# The lets.presab() function expects specific column names in the Polygons data frame
+colnames(monkey_puzzle@data) &lt;- &quot;binomial&quot;
+
+# We set the resolution to 1 degree (the default) and restrict the spatial extent to South America
+r_monkey_puzzle &lt;- lets.presab(monkey_puzzle, resol=1, xmn = -100, xmx = -10, ymn = -57, ymx = 15)</code></pre>
+<pre><code>## Warning in proj4string(obj): CRS object has comment, which is lost in output</code></pre>
+<pre class="r"><code># Map the range and range centroid
+map(&#39;world&#39;,xlim = c(-100,-10),ylim = c(-60,15))
+plot(monkey_puzzle_SAm,col=&#39;blue&#39;,add=T)
+plot(r_monkey_puzzle, add=T, alpha=0.6, legend=F)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The <code>letsR</code> package also allows to bulk-download multiple species and rasterise them to form a richness map. As example, we look at the <em>Pinus</em> genus in the Americas</p>
+<pre class="r"><code># Extract the available Pinus species names
+(pinus_names &lt;- BIEN_ranges_genus(&quot;Pinus&quot;,match_names_only = T)[,1])</code></pre>
+<pre><code>##  [1] &quot;Pinus_albicaulis&quot;     &quot;Pinus_aristata&quot;       &quot;Pinus_arizonica&quot;     
+##  [4] &quot;Pinus_armandii&quot;       &quot;Pinus_attenuata&quot;      &quot;Pinus_ayacahuite&quot;    
+##  [7] &quot;Pinus_balfouriana&quot;    &quot;Pinus_banksiana&quot;      &quot;Pinus_brutia&quot;        
+## [10] &quot;Pinus_bungeana&quot;       &quot;Pinus_canariensis&quot;    &quot;Pinus_caribaea&quot;      
+## [13] &quot;Pinus_cembroides&quot;     &quot;Pinus_clausa&quot;         &quot;Pinus_contorta&quot;      
+## [16] &quot;Pinus_coulteri&quot;       &quot;Pinus_culminicola&quot;    &quot;Pinus_densiflora&quot;    
+## [19] &quot;Pinus_devoniana&quot;      &quot;Pinus_douglasiana&quot;    &quot;Pinus_durangensis&quot;   
+## [22] &quot;Pinus_echinata&quot;       &quot;Pinus_edulis&quot;         &quot;Pinus_elliottii&quot;     
+## [25] &quot;Pinus_engelmannii&quot;    &quot;Pinus_flexilis&quot;       &quot;Pinus_georginae&quot;     
+## [28] &quot;Pinus_glabra&quot;         &quot;Pinus_greggii&quot;        &quot;Pinus_halepensis&quot;    
+## [31] &quot;Pinus_hartwegii&quot;      &quot;Pinus_herrerae&quot;       &quot;Pinus_jeffreyi&quot;      
+## [34] &quot;Pinus_koraiensis&quot;     &quot;Pinus_lambertiana&quot;    &quot;Pinus_lawsonii&quot;      
+## [37] &quot;Pinus_leiophylla&quot;     &quot;Pinus_longaeva&quot;       &quot;Pinus_luchuensis&quot;    
+## [40] &quot;Pinus_lumholtzii&quot;     &quot;Pinus_luzmariae&quot;      &quot;Pinus_maximartinezii&quot;
+## [43] &quot;Pinus_maximinoi&quot;      &quot;Pinus_monophylla&quot;     &quot;Pinus_montezumae&quot;    
+## [46] &quot;Pinus_monticola&quot;      &quot;Pinus_mugo&quot;           &quot;Pinus_muricata&quot;      
+## [49] &quot;Pinus_nelsonii&quot;       &quot;Pinus_nigra&quot;          &quot;Pinus_oocarpa&quot;       
+## [52] &quot;Pinus_palustris&quot;      &quot;Pinus_parviflora&quot;     &quot;Pinus_patula&quot;        
+## [55] &quot;Pinus_peuce&quot;          &quot;Pinus_pinaster&quot;       &quot;Pinus_pinceana&quot;      
+## [58] &quot;Pinus_pinea&quot;          &quot;Pinus_ponderosa&quot;      &quot;Pinus_praetermissa&quot;  
+## [61] &quot;Pinus_pringlei&quot;       &quot;Pinus_pseudostrobus&quot;  &quot;Pinus_pumila&quot;        
+## [64] &quot;Pinus_pungens&quot;        &quot;Pinus_quadrifolia&quot;    &quot;Pinus_radiata&quot;       
+## [67] &quot;Pinus_remota&quot;         &quot;Pinus_resinosa&quot;       &quot;Pinus_rigida&quot;        
+## [70] &quot;Pinus_roxburghii&quot;     &quot;Pinus_rzedowskii&quot;     &quot;Pinus_sabiniana&quot;     
+## [73] &quot;Pinus_serotina&quot;       &quot;Pinus_strobiformis&quot;   &quot;Pinus_strobus&quot;       
+## [76] &quot;Pinus_sylvestris&quot;     &quot;Pinus_tabuliformis&quot;   &quot;Pinus_taeda&quot;         
+## [79] &quot;Pinus_tecunumanii&quot;    &quot;Pinus_teocote&quot;        &quot;Pinus_thunbergii&quot;    
+## [82] &quot;Pinus_torreyana&quot;      &quot;Pinus_virginiana&quot;     &quot;Pinus_wallichiana&quot;</code></pre>
+<pre class="r"><code># Download the range maps for all Pinus species
+pinus &lt;- BIEN_ranges_load_species(pinus_names)
+
+# Format the column names and rasterise
+colnames(pinus@data) &lt;- &quot;binomial&quot;
+r_pinus &lt;- lets.presab(pinus, resol=1, xmn = -170, xmx = -10, ymn = -57, ymx = 60)</code></pre>
+<pre><code>## Warning in proj4string(obj): CRS object has comment, which is lost in output</code></pre>
+<pre class="r"><code># Plot species richness
+plot(r_pinus)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+<div id="occurrence-data-in-gbif-and-obis" class="section level1">
+<h1><span class="header-section-number">2</span> Occurrence data in GBIF and OBIS</h1>
+<div id="gbif-data" class="section level2">
+<h2><span class="header-section-number">2.1</span> GBIF data</h2>
+<p>GBIF defines itself as “an international network and research infrastructure funded by the world’s governments and aimed at providing anyone, anywhere, open access to data about all types of life on Earth”. GBIF contains worldwide point records from observations as well as museum records or other contributions. The data are thus not standardised and often it is unclear which spatial resolution the data represent. To understand this, let’s look at some example under <a href="https://www.gbif.org/" class="uri">https://www.gbif.org/</a>.</p>
+<div id="downloading-gbif-records" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Downloading gbif records</h3>
+<p>We will use the package <code>rgbif</code> to search and retrieve data from GBIF. A good tutorial to this package is offered <a href="https://ropensci.org/tutorials/rgbif_tutorial/">here</a>. Alternatively, the <code>dismo</code> package offers the function <code>gbif()</code> to download gbif records. Robert Hijmans, who wrote the raster and the dismo package, also offers great tutorials on his website: <a href="http://rspatial.org" class="uri">http://rspatial.org</a>.</p>
+<pre class="r"><code>library(rgbif)
+
+# Check out the number of occurrences found in GBIF:
+occ_count()</code></pre>
+<pre><code>## [1] 1622555350</code></pre>
+<pre class="r"><code># number of observations:
+occ_count(basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
+<pre><code>## [1] 19491876</code></pre>
+<pre class="r"><code># number of occurrences reported for Germany:
+occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;])</code></pre>
+<pre><code>## [1] 39649335</code></pre>
+<pre class="r"><code># number of observations reported for Germany:
+occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;],basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
+<pre><code>## [1] 246614</code></pre>
+<p>As example, we will use the Alpine shrew (<em>Sorex alpinus</em>) again. We first check whether any synonyms exist and how many records exist for the species. Download will be slow for high numbers of records.</p>
+<pre class="r"><code># Check for synonyms
+name_suggest(q=&#39;Sorex alpinus&#39;, rank=&#39;species&#39;)
+
+# Check number of records - here filtered to those with coordinate information.
+# Note that we limit the number of records to the first 10 as we are only interested in the meta data:
+occ_search(scientificName = &quot;Sorex alpinus&quot;, hasCoordinate=T, limit = 10)</code></pre>
+<p>One of the most interesting items from the outputs is the “Records found” at the very top of the output. Please be aware that <code>occ_search()</code> will not allow to download more than 100’000 records. If the GBIF data contain more, then you can set additional filters (e.g. set time period with argument <code>year</code> or geographic extent with arguments <code>decimalLatitude</code> and <code>decimalLongitude</code>) or split the area into spatial tiles (by setting geographic extent) and download the tiles separately. (Alternatively, check out the <code>dismo</code> package and the function <code>gbif()</code> to download gbif records. Robert Hijmans, who wrote the raster and the dismo package, also offers great tutorials on his website: <a href="http://rspatial.org" class="uri">http://rspatial.org</a>.))</p>
+<p>Now, let’s download the records and plot them. We had less than 500 records for the shrew, <code>limit=500</code> will be enough to download all data. We can then map the records and compare to the range map that we downloaded for the shrew.</p>
+<pre class="r"><code>gbif_shrew &lt;- occ_search(scientificName = &quot;Sorex alpinus&quot;, hasCoordinate=T, limit = 500) 
+
+# We are just interested in the data frame containing the records
+gbif_shrew &lt;- gbif_shrew$data
+
+map(&#39;world&#39;,xlim=c(5,130), ylim=c(30,75))
+points(gbif_shrew$decimalLongitude, gbif_shrew$decimalLatitude, col=&#39;red&#39;,  pch=19)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="cleaning-and-cross-checking-gbif-data" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Cleaning and cross-checking GBIF data</h3>
+<p>You should always critically assess the quality of your data. This also holds true for GBIF data. Look at the map again, do all records look plausible?</p>
+<p>Not all coordinates seem to be correct, and we thus need to cross-check these. Robert Hijmans provides some code in his <code>dismo</code> <a href="http://rspatial.org">tutorials</a>. We will here use the package <code>CoordinateCleaner</code> (<span class="citation">Zizka et al. (2019)</span>; see tutorials <a href="https://ropensci.github.io/CoordinateCleaner/">here</a>). The function <code>clean_coordinates()</code> allows cleaning geographic coordinates using different cross-checks. Here, we first compare whether the coordinates for each entry match the country code provided (test <code>centroids</code>) for each entry and are no outliers (test <code>outliers</code>). Also, we test for vicinity to a biodiversity institution like botanical or zoological gardens (test <code>ìnstitutions</code> and radius <code>inst_rad</code>), and for duplicates (test <code>duplicates</code>). There are many more tests that you can check in the help pages <code>?clean_coordinates</code>.</p>
+<pre class="r"><code>library(CoordinateCleaner)
+
+# We use only those data entries with coordinate information - Note that you don&#39;t need this if you have used the hasCoordinate=T in the occ_search() function:
+gbif_shrew &lt;- subset(gbif_shrew, !is.na(decimalLatitude))
+
+# We now clean the coordinates and check for outliers - see ?clean_coordinates for more options
+cl_gbif_shrew &lt;- clean_coordinates(gbif_shrew, lon=&quot;decimalLongitude&quot;, lat=&quot;decimalLatitude&quot;, countries=&quot;countryCode&quot;, tests=c(&quot;centroids&quot;, &quot;outliers&quot;, &quot;duplicates&quot;, &quot;institutions&quot;), inst_rad = 10000)</code></pre>
+<pre><code>## Testing coordinate validity</code></pre>
+<pre><code>## Flagged 0 records.</code></pre>
+<pre><code>## Testing country centroids</code></pre>
+<pre><code>## Flagged 0 records.</code></pre>
+<pre><code>## Testing geographic outliers</code></pre>
+<pre><code>## Flagged 1 records.</code></pre>
+<pre><code>## Testing biodiversity institutions</code></pre>
+<pre><code>## Flagged 26 records.</code></pre>
+<pre><code>## Testing duplicates</code></pre>
+<pre><code>## Flagged 188 records.</code></pre>
+<pre><code>## Flagged 210 of 479 records, EQ = 0.44.</code></pre>
+<pre class="r"><code>map(&#39;world&#39;,xlim=c(5,130), ylim=c(30,75))
+points(gbif_shrew$decimalLongitude, gbif_shrew$decimalLatitude, col=&#39;red&#39;,  pch=19)
+points(gbif_shrew$decimalLongitude[cl_gbif_shrew$.summary], gbif_shrew$decimalLatitude[cl_gbif_shrew$.summary], col=&#39;blue&#39;,  pch=18)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code># remove the flagged records
+gbif_shrew2 &lt;- gbif_shrew[cl_gbif_shrew$.summary,]</code></pre>
+<p>Have a look at Zizka et al. (2019) and the examples by Robert Hijmans (<a href="http://rspatial.org" class="uri">http://rspatial.org</a>) for finding out about other typical problems with GBIF and how to deal with these.</p>
+</div>
+</div>
+<div id="obis-data" class="section level2">
+<h2><span class="header-section-number">2.2</span> OBIS data</h2>
+<p>Currently, the OBIS database holds more than 135 000 marine species. We can access the database using the package <code>robis</code>. This can be installed from github.</p>
+<pre class="r"><code>library(devtools)
+install_github(&quot;iobis/robis&quot;)</code></pre>
+<p>You can visually check out the data on the <a href="https://mapper.obis.org/">OBIS Mapper webpage</a>. Occurrence can be downloaded from the website or using the function <code>occurrence()</code> from <code>robis</code> package.</p>
+<pre class="r"><code>library(robis)
+
+# Download OBIS data for the sea otter
+otter &lt;- occurrence(&#39;Enhydra lutris&#39;)
+
+# Map data
+map(&#39;world&#39;)
+points(otter$decimalLongitude, otter$decimalLatitude, col=&#39;blue&#39;,  pch=18)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Showing the occurrence records in our typically Atlantic-centred world view is a little confusing. We can obtain a Pacific-centred view by simply wrapping the maps.</p>
+<pre class="r"><code>map(&quot;world&quot;, wrap=c(0,360))
+points(ifelse(otter$decimalLongitude&lt;0,otter$decimalLongitude+360,otter$decimalLongitude), otter$decimalLatitude, col=&#39;blue&#39;,  pch=18)</code></pre>
+<p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Overall, the data look quite plausible. In general, however, we also need to pay attention to data cleaning in OBIS data. As the OBIS data follow the same data standards as GBIF data, we can also use the package <code>CoordinateCleaner</code> for data cleaning.</p>
+<pre class="r"><code># We test for spatial outliers and remove duplicates
+cl_otter &lt;- clean_coordinates(otter, lon=&quot;decimalLongitude&quot;, lat=&quot;decimalLatitude&quot;, tests=c(&quot;duplicates&quot;,&quot;outliers&quot;))</code></pre>
+<pre><code>## Testing coordinate validity</code></pre>
+<pre><code>## Flagged 0 records.</code></pre>
+<pre><code>## Testing geographic outliers</code></pre>
+<pre><code>## Flagged 0 records.</code></pre>
+<pre><code>## Testing duplicates</code></pre>
+<pre><code>## Flagged 2141 records.</code></pre>
+<pre><code>## Flagged 2141 of 3240 records, EQ = 0.66.</code></pre>
+<pre class="r"><code># remove the flagged records
+otter2 &lt;- otter[cl_otter$.summary,]</code></pre>
+<div class="alert alert-info">
+<p>Now it’s your turn. Pick a species of your choice (terrestrial or marine, plant or animal), consider which data source will be most appropriate, get the data, check data quality and map the distribution.</p>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Hurlbert2007">
+<p>Hurlbert, Allen H., and Walter Jetz. 2007. “Species Richness, Hotspots, and the Scale Dependence of Range Maps in Ecology and Conservation.” <em>PNAS</em> 104: 13384–9.</p>
+</div>
+<div id="ref-Jetz2012a">
+<p>Jetz, Walter, Jana M. McPherson, and Robert P. Guralnick. 2012. “Integrating Biodiversity Distribution Knowledge: Toward a Global Map of Life.” <em>Trends in Ecology &amp; Evolution</em> 27: 151–59.</p>
+</div>
+<div id="ref-Krosby2015">
+<p>Krosby, Meade, Chad B. Wilsey, Jenny L. McGuire, Jennifer M. Duggan, Theresa M. Nogeire, Julie A. Heinrichs, Joshua J. Tewksbury, and Joshua J. Lawler. 2015. “Climate-Induced Range Overlap Among Closely Related Species.” <em>Nature Climate Change</em> 5: 883–86.</p>
+</div>
+<div id="ref-W_est_2019">
+<p>Wüest, Rafael O., Niklaus E. Zimmermann, Damaris Zurell, Jake M. Alexander, Susanne A. Fritz, Christian Hof, Holger Kreft, et al. 2019. “Macroecology in the Age of Big Data Where to Go from Here?” <em>Journal of Biogeography</em> 47 (1). Wiley: 1–12. <a href="https://doi.org/10.1111/jbi.13633">https://doi.org/10.1111/jbi.13633</a>.</p>
+</div>
+<div id="ref-Zizka2019">
+<p>Zizka, Alexander, Daniele Silvestro, Tobias Andermann, Josue Azevedo, Camila Duarte Ritter, Daniel Edler, Harith Farooq, et al. 2019. “CoordinateCleaner : Standardized Cleaning of Occurrence Records from Biological Collection Databases.” <em>Methods in Ecology and Evolution</em> 10 (5): 744–51. <a href="https://doi.org/10.1111/2041-210x.13152">https://doi.org/10.1111/2041-210x.13152</a>.</p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE html>
+<html>
+
+<br>
+<hr />
+<div id="footer">
+<p>Damaris Zurell, 2020 <a href="http://creativecommons.org/licenses/by/4.0/" >(CC BY 4.0)</a>.  </p>
+</div>
+
+</html>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

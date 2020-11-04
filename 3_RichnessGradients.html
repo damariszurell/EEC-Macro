@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Species richness gradients</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Macroecology</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Course schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R practicals
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_Intro.html">1. Introduction to R</a>
+    </li>
+    <li>
+      <a href="2_SpatialData.html">2. Spatial data in R</a>
+    </li>
+    <li>
+      <a href="3_RichnessGradients.html">3. Species richness gradients</a>
+    </li>
+    <li>
+      <a href="4_SpeciesData.html">4. Global species data</a>
+    </li>
+    <li>
+      <a href="5_SpeciesThreats.html">5. Species threats</a>
+    </li>
+    <li>
+      <a href="6_BiodivChanges.html">6. Analysing biodiversity changes</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:damaris@zurell.de">
+    <span class="fa fa-envelope"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://damariszurell.github.io">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/ZurellLab">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Species richness gradients</h1>
+
+</div>
+
+
+<hr />
+<div class="alert alert-info">
+<p><strong>RStudio project</strong></p>
+<p>Open the RStudio project that we created in the first session. I recommend to use this RStudio project for the entire course and within the RStudio project create separate R scripts for each session.</p>
+<ul>
+<li>Create a new empty R script by going to the tab “File”, select “New File” and then “R script”</li>
+<li>In the new R script, type <code># Session 3: Species richness gradients</code> and save the file in your folder “scripts” within your project folder, e.g. as “3_RichnessGradients.R”</li>
+</ul>
+</div>
+<p>Today, the aim is to run your own first analyses of biodiversity patterns based on the data handling skills that you have learned in the previous sessions. In contrast to most of the course practicals, I do not provide a full script here but rather want to encourage you to code your analyses yourself.</p>
+<div id="distribution-data" class="section level1">
+<h1><span class="header-section-number">1</span> Distribution data</h1>
+<p>All analyses of today will be based on a dataset of British breeding and wintering birds recently made available by <span class="citation">Gillings et al. (2019)</span>. The original data contain breeding bird records in 20-year cycles (1968-1972, 1988-1991, 2008-2011) and wintering bird records in 30-year cycles (1981/1982-1983-1984, 2007/2008-2010/2011) at a 10 km spatial resolution throughout Britain, Ireland, the Isle of Man and the Channel Islands. Some rarer species are represented at 20 or 50 km resolutions. Here, we will concentrate on bird records from Britain at 10 km resolution during the breeding seasons 2008-2011. The original data are available through the British Trust of Ornithology (www.bto.org; direct download <a href="https://www.bto.org/sites/default/files/atlas_open_data_files.zip">here</a>). To simplify matters, I have already filtered the data to contain only the relevant breeding records. These cleaned data are available <a href="https://damariszurell.github.io/EEC-Macro/data/UK_BBatlas_2008.csv">here</a>. Please download the data and save them in an appropriate folder (e.g. in <em>data</em> folder).</p>
+<p>We can now read in the data into R.</p>
+<pre class="r"><code># Read in the distribution dataset:
+bird_dist &lt;- read.table(&#39;data/UK_BBatlas_2008.csv&#39;,header=T, sep=&#39;,&#39;, stringsAsFactors = F)</code></pre>
+<p>Let’s take a first look at the data and find out what information is contained in there.</p>
+<pre class="r"><code>str(bird_dist, list.len=10)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    2833 obs. of  230 variables:
+##  $ grid                         : chr  &quot;HP40&quot; &quot;HP50&quot; &quot;HP51&quot; &quot;HP60&quot; ...
+##  $ EASTING                      : int  445000 455000 455000 465000 465000 395000 395000 415000 415000 415000 ...
+##  $ NORTHING                     : int  1205000 1205000 1215000 1205000 1215000 1135000 1145000 1145000 1155000 1165000 ...
+##  $ Gavia_stellata               : int  0 1 1 1 1 1 1 0 1 1 ...
+##  $ Gavia_arctica                : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Tachybaptus_ruficollis       : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Podiceps_cristatus           : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Podiceps_nigricollis         : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Fulmarus_glacialis           : int  1 1 1 1 1 1 1 0 1 1 ...
+##  $ Puffinus_puffinus            : int  0 0 0 0 0 0 0 0 0 0 ...
+##   [list output truncated]</code></pre>
+<p>The data frame contains 230 columns of which the first three columns describe the grid reference and coordinates. The coordinates are provided in the British National Grid, with grid letters and grid digits. The British National Grid is based on a transverse Mercator projection, and the grid letters and grid digits can easily be converted into the so-called Easting and Northing coordinates. All other columns contain presence and absence data of 227 bird species for the breeding seasons 2008-2011. The data contain only species presences with probable or confirmed breeding. The column names are the latin species names.</p>
+<p>Let’s plot the spatial distribution of the Willow ptargmigan (<em>Lagopus lagopus</em>). As the data are provided for all grid cells in Britain without any holes, we can use the convenient <code>rasterFromXYZ()</code> function in the <code>raster</code> package for converting the data frame into raster data.</p>
+<pre class="r"><code>library(raster)
+
+# The coordinate reference system for the UK National Grid is:
+proj_UK &lt;- &#39;+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs&#39;
+
+r_ptarmigan &lt;- rasterFromXYZ(bird_dist[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;Lagopus_lagopus&#39;)], crs=proj_UK)
+
+plot(r_ptarmigan)</code></pre>
+<p><img src="3_RichnessGradients_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div id="task-1-species-richness-patterns" class="section level2">
+<h2><span class="header-section-number">1.1</span> Task 1: Species richness patterns</h2>
+<p>I would like you to map the species richness of breeding birds in Britain. As you have seen, your data frame contain presence and absence records for all breeding bird species for each 10 km cell in Britain. For this, you first have to sum up the number of bird species present at any location. For example, use the <code>rowSums()</code> function from session 1. But be careful to only sum up the columns containing species records, not the columns containing coordinates. In the end, you will need a data frame or matrix containing the coordinates and the species richness per cell like this:</p>
+<pre><code>##   EASTING NORTHING richness
+## 1  445000  1205000       12
+## 2  455000  1205000       41
+## 3  455000  1215000       25
+## 4  465000  1205000       36
+## 5  465000  1215000       47
+## 6  395000  1135000       43</code></pre>
+<p>Then, you can use the <code>rasterFromXYZ()</code> function from above to convert this new data frame into a raster object and map this. You should receive a map similar to this:</p>
+<p><img src="3_RichnessGradients_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>How is bird species richness distributed in Britain?</p>
+<div class="alert alert-info">
+<p><strong>Summary Task 1: Map species richness</strong></p>
+<ul>
+<li>Compute species richness per cell</li>
+<li>Plot a map of species richness across Britain</li>
+<li>Describe the species richness patterns observed in Britain</li>
+</ul>
+</div>
+</div>
+<div id="task-2-latitudinal-species-richness-gradient" class="section level2">
+<h2><span class="header-section-number">1.2</span> Task 2: Latitudinal species richness gradient</h2>
+<p>As we have discussed in the Macroecology lecture, we can analyse different aspects of spatial patterns in species richness. For this, please revisit the article by <span class="citation">(Gaston 2000)</span>. I would then like you to plot the latitudinal species richness gradient, potentially including a smoothing line to see the general trend:</p>
+<p><img src="3_RichnessGradients_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Compare your latitudinal richness gradient with <span class="citation">(Gaston 2000)</span> and discuss.</p>
+<div class="alert alert-info">
+<p><strong>Summary Task 2: Plot latitudinal species richness gradient</strong></p>
+<ul>
+<li>Plot species richness against latitude</li>
+<li>Add a line smoother</li>
+<li>Describe the latitudinal richness gradient observed in Britain</li>
+</ul>
+</div>
+</div>
+<div id="task-3-species-energy-relationships" class="section level2">
+<h2><span class="header-section-number">1.3</span> Task 3: Species-energy relationships</h2>
+<p><span class="citation">Gaston (2000)</span> also presented species-energy relationship and I would like you to plot such a relationship for British breeding birds, for example the relationship between species richness and annual temperature. For this, you will have to join the species richness data with climatic data. For convenience, I have already processed worldclim data (19 bioclimatic variables) for you such that the raster stack is projected in the British National Grid at 10 km spatial resolution. You can download the raster stack data <a href="https://damariszurell.github.io/EEC-Macro/data/UK_bioclim.zip">here</a>. Please save it in an appropriate place (e.g. your <em>data</em> folder), unzip it and load the raster stack data into your working space. Your climate layers should look like this:</p>
+<p><img src="3_RichnessGradients_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Next, I would like you to plot the relationship between species richness and summer temperature. To this end, you will have to extract the climate data for all cells in Britain and join these with the species richness data. Also, you should look up the definition of the bioclimatic variables again. All information for this task can be found in <a href="https://damariszurell.github.io/EEC-Macro/2_SpatialData.html">Session 2 on Spatial data</a>.</p>
+<p><img src="3_RichnessGradients_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Compare this species-energy relationship with <span class="citation">(Gaston 2000)</span> and discuss.</p>
+<div class="alert alert-info">
+<p><strong>Summary Task 3: Plot species-energy relationship</strong></p>
+<ul>
+<li>Join the species richness data with climate data</li>
+<li>Plot species richness against mean summer temperature</li>
+<li>Describe the species-energy relationship in Britain</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Gaston2000a">
+<p>Gaston, Kevin J. 2000. “Global Patterns in Biodiversity.” <em>Nature</em> 405: 220–27. <a href="https://doi.org/10.1038/35012228">https://doi.org/10.1038/35012228</a>.</p>
+</div>
+<div id="ref-Gillings2019">
+<p>Gillings, Simon, Dawn E. Balmer, Brian J. Caffrey, Iain S. Downie, David W. Gibbons, Peter C. Lack, James B. Reid, J. Tim R. Sharrock, Robert L. Swann, and Robert J. Fuller. 2019. “Breeding and Wintering Bird Distributions in Britain and Ireland from Citizen Science Bird Atlases.” <em>Global Ecology and Biogeography</em> 28 (7): 866–74. <a href="https://doi.org/10.1111/geb.12906">https://doi.org/10.1111/geb.12906</a>.</p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE html>
+<html>
+
+<br>
+<hr />
+<div id="footer">
+<p>Damaris Zurell, 2020 <a href="http://creativecommons.org/licenses/by/4.0/" >(CC BY 4.0)</a>.  </p>
+</div>
+
+</html>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

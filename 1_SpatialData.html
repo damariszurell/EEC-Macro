@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Spatial data in R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Macroecology</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Course schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R practicals
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="0_Intro.html">0. Introduction to R</a>
+    </li>
+    <li>
+      <a href="1_SpatialData.html">1. Spatial data in R</a>
+    </li>
+    <li>
+      <a href="2_RichnessGradients.html">2. Species richness gradients</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:damaris@zurell.de">
+    <span class="fa fa-envelope"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://damariszurell.github.io">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/ZurellLab">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Spatial data in R</h1>
+
+</div>
+
+
+<hr />
+<div class="alert alert-info">
+<p><strong>RStudio project</strong></p>
+<p>Open the RStudio project that we created in the previous session. I recommend to use this RStudio project for the entire course and within the RStudio project create separate R scripts for each session.</p>
+<ul>
+<li>Create a new empty R script by going to the tab “File”, select “New File” and then “R script”</li>
+<li>In the new R script, type <code># Session 1: Spatial data in R</code> and save the file in your folder “scripts” within your project folder, e.g. as “1_SpatialData.R”</li>
+</ul>
+</div>
+<div id="working-with-geospatial-data-in-r" class="section level1">
+<h1><span class="header-section-number">1</span> Working with geospatial data in R</h1>
+<p>In this course, we will deal a lot with geospatial data. Nowadays, R offers a lot of GIS functionalities in different packages.</p>
+<div id="installing-geospatial-packages-on-mac" class="section level2">
+<h2><span class="header-section-number">1.1</span> Installing geospatial packages on Mac</h2>
+<p>If you work on a Windows machine, then installing and using these packages should be straight forward. If you are working on a Mac, you will need to install the GDAL software first. Here are some instructions for doing so:</p>
+<ul>
+<li>Download the GDAL OS X complete install from kyngchaos: <a href="http://www.kyngchaos.com/software/frameworks/" class="uri">http://www.kyngchaos.com/software/frameworks/</a></li>
+<li>Then, follow the instructions by <a href="https://www.r-bloggers.com/2010/11/installing-rgdal-on-mac-os-x-2/" class="uri">https://www.r-bloggers.com/2010/11/installing-rgdal-on-mac-os-x-2/</a></li>
+</ul>
+</div>
+<div id="installing-r-packages" class="section level2">
+<h2><span class="header-section-number">1.2</span> Installing R packages</h2>
+<p>We will use a number of new R packages. Remember that we can install new packages with the function <code>install.packages()</code>. Make sure also to install the dependencies.</p>
+<pre class="r"><code>install.packages(c(&#39;sp&#39;,&#39;raster&#39;), dep=T)</code></pre>
+</div>
+</div>
+<div id="introduction-to-spatial-data" class="section level1">
+<h1><span class="header-section-number">2</span> Introduction to spatial data</h1>
+<p>Spatial data are typically stored as either vector data or raster data <span class="citation">(With 2019)</span>. Discrete objects with clear boundaries are usually represented by vector data (e.g. individual trees, roads, countries) while continuous phenomena without clear boundaries are usually represented by raster data (e.g. elevation, temperature).</p>
+<p>Vector data can be mapped a points, lines, and polygons:</p>
+<ul>
+<li><strong>Points</strong> occur at discrete locations and are represented by a coordinate pair (x,y). Each point may carry additional informaton, the so-called attributes, e.g. the species name of the individual captured at the location along with date.</li>
+<li><strong>Lines</strong> describe linear features and are defined by at least two coordinate pairs (x,y), the end points of the line. A line can also consistent of several line segments.</li>
+<li><strong>Polygons</strong> describe two-dimensional features in the landscapes and define a bounded area, enclosed by lines. Thus, a polygon needs to consist of at least three coordinate pairs (x,y.</li>
+</ul>
+<p>By contrast, a raster represents the landscape as a regularly spaced grid and is used to represent data that varies continuously across space such as elevation, temperature or NDVI. Raster cells can contain numeric values (e.g. elevation) or categorical values (e.g. land cover type). The coordinate information is stored differently from vector data because storing the coordinates for each grid cell in the raster would use too much storage space. To define a raster, we only need to know the coordinates of one corner, the spatial extent and the spatial resolution to infer the coordinates of each cell.</p>
+</div>
+<div id="vector-data-in-r" class="section level1">
+<h1><span class="header-section-number">3</span> Vector data in R</h1>
+<p>The package <code>sp</code> defines a set of classes to represent spatial vector data and perform spatial data analyses. In this package, the geometries of vector data are stored as <code>SpatialPoints</code>, <code>SpatialLines</code> and <code>SpatialPolygons</code>, and their attributes are stored within <code>SpatialPointsDataFrame</code>, <code>SpatialLinesDataFrame</code> and <code>SpatialPolgyonsDataFrame</code></p>
+<p>For more detailed tutorials see <a href="https://rspatial.org" class="uri">https://rspatial.org</a>.</p>
+<div id="spatialpoints" class="section level2">
+<h2><span class="header-section-number">3.1</span> SpatialPoints</h2>
+<p>For illustration, we will generate some random points data and convert them into <code>Spatial*</code> objects.</p>
+<pre class="r"><code># We set a seed for the random number generator, so that we all obtain the same results
+set.seed(12345)
+
+coords = cbind(
+  x=rnorm(10, sd=2),
+  y=rnorm(10, sd=2)
+)
+
+str(coords)</code></pre>
+<pre><code>##  num [1:10, 1:2] 1.171 1.419 -0.219 -0.907 1.212 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : NULL
+##   ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;</code></pre>
+<pre class="r"><code>plot(coords)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>We now convert the random points into a <code>SpatialPoints</code> object and inspect it.</p>
+<pre class="r"><code>library(sp)
+
+# Convert into SpatialPoints
+sp = SpatialPoints(coords)
+
+# Check out the object
+class(sp)</code></pre>
+<pre><code>## [1] &quot;SpatialPoints&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<pre class="r"><code># Inspect the (spatial) information in the object:
+showDefault(sp)</code></pre>
+<pre><code>## An object of class &quot;SpatialPoints&quot;
+## Slot &quot;coords&quot;:
+##                x          y
+##  [1,]  1.1710576 -0.2324956
+##  [2,]  1.4189320  3.6346241
+##  [3,] -0.2186066  0.7412557
+##  [4,] -0.9069943  1.0404329
+##  [5,]  1.2117749 -1.5010640
+##  [6,] -3.6359119  1.6337997
+##  [7,]  1.2601971 -1.7727150
+##  [8,] -0.5523682 -0.6631552
+##  [9,] -0.5683195  2.2414253
+## [10,] -1.8386440  0.5974474
+## 
+## Slot &quot;bbox&quot;:
+##         min      max
+## x -3.635912 1.418932
+## y -1.772715 3.634624
+## 
+## Slot &quot;proj4string&quot;:
+## CRS arguments: NA</code></pre>
+<pre class="r"><code># The raster package also provides a nicer print summary, so we load it as well:
+library(raster)
+sp</code></pre>
+<pre><code>## class       : SpatialPoints 
+## features    : 10 
+## extent      : -3.635912, 1.418932, -1.772715, 3.634624  (xmin, xmax, ymin, ymax)
+## crs         : NA</code></pre>
+<p>The slot <code>bbox</code> describes the bounding box around the known coordinates and the slot <code>proj4string</code> stores the coordinate reference system (“CRS”). In our case, no CRS was provided. We can explicitly add a CRS when creating the <code>SpatialPoints</code> object:</p>
+<pre class="r"><code>sp = SpatialPoints(coords, proj4string=CRS(&#39;+proj=longlat +datum=WGS84&#39;))
+sp</code></pre>
+<pre><code>## class       : SpatialPoints 
+## features    : 10 
+## extent      : -3.635912, 1.418932, -1.772715, 3.634624  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<p>Next, we can generate a <code>SpatialPointsDataFrame</code> containing additional information (or attributes) for each point. Let’s assume the spatial points are trees, either of three species.</p>
+<pre class="r"><code># Create attribute table
+(data=data.frame(ID=1:10,species=sample(c(&#39;beech&#39;,&#39;oak&#39;,&#39;birch&#39;),10,replace=T)))</code></pre>
+<pre><code>##    ID species
+## 1   1     oak
+## 2   2     oak
+## 3   3   birch
+## 4   4   beech
+## 5   5   beech
+## 6   6   birch
+## 7   7     oak
+## 8   8   beech
+## 9   9   beech
+## 10 10   birch</code></pre>
+<pre class="r"><code># Create SpatialPointsDataFrame
+(spdf = SpatialPointsDataFrame(sp, data))</code></pre>
+<pre><code>## class       : SpatialPointsDataFrame 
+## features    : 10 
+## extent      : -3.635912, 1.418932, -1.772715, 3.634624  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs 
+## variables   : 2
+## names       : ID, species 
+## min values  :  1,   beech 
+## max values  : 10,     oak</code></pre>
+<pre class="r"><code># To see what is inside
+str(spdf)</code></pre>
+<pre><code>## Formal class &#39;SpatialPointsDataFrame&#39; [package &quot;sp&quot;] with 5 slots
+##   ..@ data       :&#39;data.frame&#39;:  10 obs. of  2 variables:
+##   .. ..$ ID     : int [1:10] 1 2 3 4 5 6 7 8 9 10
+##   .. ..$ species: chr [1:10] &quot;oak&quot; &quot;oak&quot; &quot;birch&quot; &quot;beech&quot; ...
+##   ..@ coords.nrs : num(0) 
+##   ..@ coords     : num [1:10, 1:2] 1.171 1.419 -0.219 -0.907 1.212 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
+##   ..@ bbox       : num [1:2, 1:2] -3.64 -1.77 1.42 3.63
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
+##   .. .. ..$ : chr [1:2] &quot;min&quot; &quot;max&quot;
+##   ..@ proj4string:Formal class &#39;CRS&#39; [package &quot;sp&quot;] with 1 slot
+##   .. .. ..@ projargs: chr &quot;+proj=longlat +datum=WGS84 +no_defs&quot;</code></pre>
+</div>
+<div id="spatiallines-and-spatialpolygons" class="section level2">
+<h2><span class="header-section-number">3.2</span> SpatialLines and SpatialPolygons</h2>
+<p>The structure of <code>SpatialLines</code> and <code>SpatialPolygons</code> objects is analogous to <code>SpatialPoints</code>. We use the functions <code>spLines()</code> and <code>spPolygons()</code> from the <code>raster</code> package to creates these objects.</p>
+<pre class="r"><code># Create SpatialLines through all oak trees in the data
+lns &lt;- spLines(subset(spdf,species==&#39;oak&#39;), crs=CRS(&#39;+proj=longlat +datum=WGS84&#39;))
+
+
+# Create SpatialPolygons for all birch trees in the data
+pols &lt;- spPolygons(subset(spdf,species==&#39;birch&#39;), crs=CRS(&#39;+proj=longlat +datum=WGS84&#39;))</code></pre>
+<p>Finally, let’s plot our point, line and polygon data.</p>
+<pre class="r"><code>plot(sp, axes=T, lwd=2)
+plot(lns, add=T, col=&#39;red&#39;, lwd=2)
+plot(pols, border=&#39;blue&#39;,col=&#39;yellow&#39;,add=T)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="reading-vector-data-from-file" class="section level2">
+<h2><span class="header-section-number">3.3</span> Reading vector data from file</h2>
+<p>Most often, vector data are stored as shapefiles. Download the <a href="https://damariszurell.github.io/EEC-Macro/data/IUCN_Sorex_alpinus.zip">zip folder</a> containg IUCN range data of the Alpine Shrew to your data folder and unzip it. You will see that several files are contained in this folder. All of these are necessary parts of the shapefile and contain the different information on geometry and attributes.</p>
+<p>We use the <code>raster</code> package to read in the data:</p>
+<pre class="r"><code>(shrew &lt;- shapefile(&#39;data/IUCN_Sorex_alpinus.shp&#39;))</code></pre>
+<pre><code>## class       : SpatialPolygonsDataFrame 
+## features    : 1 
+## extent      : 5.733728, 26.67935, 42.20601, 51.89984  (xmin, xmax, ymin, ymax)
+## crs         : +proj=longlat +datum=WGS84 +no_defs 
+## variables   : 27
+## names       : id_no,      binomial, presence, origin, seasonal, compiler, yrcompiled,                                              citation, source, dist_comm, island, subspecies, subpop,            legend, tax_comm, ... 
+## value       : 29660, Sorex alpinus,        1,      1,        1,     IUCN,       2008, IUCN (International Union for Conservation of Nature),     NA,        NA,     NA,         NA,     NA, Extant (resident),       NA, ...</code></pre>
+<pre class="r"><code># Plot the Iberianc pensinsula
+library(maptools)</code></pre>
+<pre><code>## Checking rgeos availability: TRUE</code></pre>
+<pre class="r"><code>data(wrld_simpl)
+plot(wrld_simpl,xlim=c(5,30), ylim=c(40,55))
+
+# Overlay the range of the Alpine Shrew
+plot(shrew, col=&#39;red&#39;, add=T)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+<div id="raster-data-in-r" class="section level1">
+<h1><span class="header-section-number">4</span> Raster data in R</h1>
+<p>We will use the <code>raster</code> package to represent and analyse raster data in R. The package contains different raster data classes, most important for this course are <code>RasterLayer</code>, <code>RasterStack</code> and <code>RasterBrick</code>. <code>RasterLayer</code> contain only a single layer of raster information while <code>RasterStack</code> and <code>RasterBrick</code> can contain multiple layers (from separate files or from a single multi-layer file, respectively).</p>
+<p>The function <code>raster()</code> can be used to create or read in <code>RasterLayer</code> objects.</p>
+<pre class="r"><code>(r1 &lt;- raster(ncol=10, nrow=10, xmx=-80, xmn=-150, ymn=20, ymx=60))</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 10, 10, 100  (nrow, ncol, ncell)
+## resolution : 7, 4  (x, y)
+## extent     : -150, -80, 20, 60  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<p>We can access the attributes of each grid cell by using the function <code>values()</code>. Obviously, there are no values yet in the <code>RasterLayer</code> object and thus we assign some randomly.</p>
+<pre class="r"><code>summary(values(r1))</code></pre>
+<pre><code>##    Mode    NA&#39;s 
+## logical     100</code></pre>
+<pre class="r"><code>values(r1) &lt;- rnorm(ncell(r1))
+
+# plot the raster
+plot(r1)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>A <code>RasterStack</code> can be created or read in using the function <code>stack()</code>.</p>
+<pre class="r"><code># Create another RasterLayer and assign values
+r2 &lt;- r1
+values(r2) &lt;- 1:ncell(r2)
+
+# Stack the raster layers
+(r &lt;- stack(r1,r2))</code></pre>
+<pre><code>## class      : RasterStack 
+## dimensions : 10, 10, 100, 2  (nrow, ncol, ncell, nlayers)
+## resolution : 7, 4  (x, y)
+## extent     : -150, -80, 20, 60  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## names      :    layer.1,    layer.2 
+## min values :  -2.380358,   1.000000 
+## max values :   2.477111, 100.000000</code></pre>
+<pre class="r"><code>plot(r)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div id="read-in-raster-data" class="section level2">
+<h2><span class="header-section-number">4.1</span> Read in raster data</h2>
+<p>In most cases, we will read in raster data from file. For this we can use the same commands as above, <code>raster()</code> for reading in single-layer raster files and <code>stack()</code> or <code>brick()</code> for reading in multi-layer raster files.</p>
+<p>First, download the temperature map for UK <a href="https://damariszurell.github.io/EEC-Macro/data/UK_temp.tif">here</a> to your data folder and read it in. The raster layer represents the mean annual in temperature [°C * 10].</p>
+<pre class="r"><code>(temp &lt;- raster(&#39;data/UK_temp.tif&#39;))</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded
+## datum Unknown based on Airy 1830 ellipsoid in CRS definition</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 122, 66, 8052  (nrow, ncol, ncell)
+## resolution : 10000, 10000  (x, y)
+## extent     : 0, 660000, 0, 1220000  (xmin, xmax, ymin, ymax)
+## crs        : +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs 
+## source     : /Users/zurell/data/Lehre/UP_Lehre/EEC/Macroecology/Pracs_Macro/macro-course/data/UK_temp.tif 
+## names      : UK_temp 
+## values     : 35.71785, 112  (min, max)</code></pre>
+<pre class="r"><code>plot(temp)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Second, download the <a href="https://damariszurell.github.io/EEC-Macro/data/UK_bioclim.zip">zip folder</a> containing multi-layer raster data for 19 bioclimatic variables of UK, and unzip in your data folder. It contains two files. The file ending “*.grd” represents the natural file ending for files created using the <code>raster</code> package. It needs to be accompanied by a file ending on “*.gri”, which contains all the cell attributes. The bioclimatic variables are explained <a href="">here</a><a href="https://www.worldclim.org/data/bioclim.html" class="uri">https://www.worldclim.org/data/bioclim.html</a>.</p>
+<pre class="r"><code>(bioclim &lt;- stack(&#39;data/UK_bioclim.grd&#39;))</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded datum OSGB_1936 in CRS definition,
+##  but +towgs84= values preserved</code></pre>
+<pre><code>## class      : RasterStack 
+## dimensions : 122, 66, 8052, 19  (nrow, ncol, ncell, nlayers)
+## resolution : 10000, 10000  (x, y)
+## extent     : 0, 660000, 0, 1220000  (xmin, xmax, ymin, ymax)
+## crs        : +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.1502,0.247,0.8421,-20.4894 +units=m +no_defs 
+## names      :       bio1,       bio2,       bio3,       bio4,       bio5,       bio6,       bio7,       bio8,       bio9,      bio10,      bio11,      bio12,      bio13,      bio14,      bio15, ... 
+## min values :   35.71785,   41.00000,   30.00000, 3060.24494,  134.00000,  -55.48918,  129.84425,  -12.39841,   35.62245,  102.15461,  -23.39841,  537.64811,   52.00000,   31.00000,    7.51282, ... 
+## max values :  112.00000,   82.64219,   40.00000, 5321.53380,  231.58053,   43.00000,  228.91180,  162.73290,  152.06476,  173.57946,   70.00000, 2050.48998,  258.60188,  104.93003,   32.00000, ...</code></pre>
+<pre class="r"><code>plot(bioclim)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="download-raster-data" class="section level2">
+<h2><span class="header-section-number">4.2</span> Download raster data</h2>
+<p>The <code>raster</code> package is offering direct access to some standard repositories using the function <code>getData()</code>, for example altitudinal data, data on the global administrative boundaries as well as current and future climates from <a href="http://worldclim.org/">WorldClim</a> <span class="citation">(Hijmans et al. 2005)</span>. For more information, see the help pages <code>?getData</code>.</p>
+<pre class="r"><code># Download global bioclimatic data from worldclim:
+(clim &lt;- getData(&quot;worldclim&quot;, var=&quot;bio&quot;, res=10, download=T, path=&quot;data&quot;))</code></pre>
+<pre><code>## class      : RasterStack 
+## dimensions : 900, 2160, 1944000, 19  (nrow, ncol, ncell, nlayers)
+## resolution : 0.1666667, 0.1666667  (x, y)
+## extent     : -180, 180, -60, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## names      :  bio1,  bio2,  bio3,  bio4,  bio5,  bio6,  bio7,  bio8,  bio9, bio10, bio11, bio12, bio13, bio14, bio15, ... 
+## min values :  -269,     9,     8,    72,   -59,  -547,    53,  -251,  -450,   -97,  -488,     0,     0,     0,     0, ... 
+## max values :   314,   211,    95, 22673,   489,   258,   725,   375,   364,   380,   289,  9916,  2088,   652,   261, ...</code></pre>
+<pre class="r"><code>plot(clim)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="manipulate-raster-data" class="section level2">
+<h2><span class="header-section-number">4.3</span> Manipulate raster data</h2>
+<p>The <code>raster</code> package offers different functionalities to manipulate the spatial data, for example aggregating the data to coarser resolutions (<code>aggregate()</code>), or cropping to a specific extent (<code>crop()</code>).</p>
+<pre class="r"><code># Crop the temperature layer (bio1) to roughly European extent
+temp_eur &lt;- crop(clim[[1]], c(-15,45,35,72))
+
+# Aggregate to one-degree and two-degree resolution
+temp_eur_onedeg &lt;- aggregate(temp_eur, 6)
+temp_eur_twodeg &lt;- aggregate(temp_eur, 12)
+
+par(mfrow=c(1,3))
+plot(temp_eur)
+plot(temp_eur_onedeg)
+plot(temp_eur_twodeg)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="extract-raster-data" class="section level2">
+<h2><span class="header-section-number">4.4</span> Extract raster data</h2>
+<p>There are different ways for extracting information from raster layers. We have already worked with <code>values()</code>. If we have coordinate data, we can use these coordinates to “pierce” through raster layers. That’s one of the easiest ways to extract relevant environmental data for specific locations. For illustration, we create some random locations and then extract the climate data from our raster layers.</p>
+<pre class="r"><code># Generate random locations
+lonlat = cbind(
+  lon=runif(10, min = xmin(temp_eur), max = xmax(temp_eur)),
+  lat=runif(10, min = ymin(temp_eur), max = ymax(temp_eur))
+)
+
+# Map temperature and locations
+plot(temp_eur)
+points(lonlat, cex=2, pch=19)</code></pre>
+<p><img src="1_SpatialData_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code># Extract temperature values at these locations
+raster::extract(temp_eur, lonlat)</code></pre>
+<pre><code>##  [1] NA NA NA 34 63 99 86 NA 28 NA</code></pre>
+<p>As the temperature values are only available on the continent, all locations in the ocean will receive an <code>NA</code> value.</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-Hijmans2005">
+<p>Hijmans, R. J., S. E. Cameron, J. L. Parra, P. G. Jones, and A. Jarvis. 2005. “Very High Resolution Interpolated Climate Surfaces for Global Land Areas.” <em>International Journal of Climatology</em> 25 (15): 1965–78. <a href="https://doi.org/10.1002/joc.1276">https://doi.org/10.1002/joc.1276</a>.</p>
+</div>
+<div id="ref-With2019">
+<p>With, Kimberly A. 2019. <em>Essentials of Landscape Ecology</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780198838388.001.0001">https://doi.org/10.1093/oso/9780198838388.001.0001</a>.</p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE html>
+<html>
+
+<br>
+<hr />
+<div id="footer">
+<p>Damaris Zurell, 2020 <a href="http://creativecommons.org/licenses/by/4.0/" >(CC BY 4.0)</a>.  </p>
+</div>
+
+</html>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
