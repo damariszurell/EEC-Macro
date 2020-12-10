@@ -25,8 +25,19 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -455,12 +466,8 @@ plot(shrew, col=&#39;red&#39;, add=T)</code></pre>
 <div id="bien-range-maps" class="section level2">
 <h2><span class="header-section-number">1.2</span> BIEN range maps</h2>
 <p>The <a href="https://bien.nceas.ucsb.edu/bien/biendata/">BIEN</a> database (Botanical Information and Ecology Network) contains many range maps on plants, but unfortunately only for the Americas. These can be accessed using the <code>BIEN</code> package. As illustrative example, we load the range map for the monkey puzzle tree (or Chilean pine - <em>Araucaria araucana</em>).</p>
-<pre class="r"><code>library(BIEN)</code></pre>
-<pre><code>## Loading required package: RPostgreSQL</code></pre>
-<pre><code>## Loading required package: DBI</code></pre>
-<pre><code>## Type vignette(&quot;BIEN&quot;) or vignette(&quot;BIEN_tutorial&quot;) to get started</code></pre>
-<pre><code>## </code></pre>
-<pre class="r"><code>library(sp)
+<pre class="r"><code>library(BIEN)
+library(sp)
 
 # Load the range map for the monkey puzzle
 (monkey_puzzle &lt;- BIEN_ranges_load_species(&#39;Araucaria_araucana&#39;))</code></pre>
@@ -494,7 +501,7 @@ area(monkey_puzzle)/1000000</code></pre>
 <pre><code>## [1] 5783633</code></pre>
 <p>We can also very easily calculate the centre of gravity or range centroid from the spatial polygons.</p>
 <pre class="r"><code>library(rgeos)</code></pre>
-<pre><code>## rgeos version: 0.5-3, (SVN revision 634)
+<pre><code>## rgeos version: 0.5-5, (SVN revision 640)
 ##  GEOS runtime version: 3.8.1-CAPI-1.13.3 
 ##  Linking to sp version: 1.4-2 
 ##  Polygon checking: TRUE</code></pre>
@@ -557,9 +564,9 @@ plot(shrew_1deg, add=T, alpha=0.6, legend=F)</code></pre>
 colnames(monkey_puzzle@data) &lt;- &quot;binomial&quot;
 
 # We set the resolution to 1 degree (the default) and restrict the spatial extent to South America
-r_monkey_puzzle &lt;- lets.presab(monkey_puzzle, resol=1, xmn = -100, xmx = -10, ymn = -57, ymx = 15)</code></pre>
-<pre><code>## Warning in proj4string(obj): CRS object has comment, which is lost in output</code></pre>
-<pre class="r"><code># Map the range and range centroid
+r_monkey_puzzle &lt;- lets.presab(monkey_puzzle, resol=1, xmn = -100, xmx = -10, ymn = -57, ymx = 15)
+
+# Map the range and range centroid
 map(&#39;world&#39;,xlim = c(-100,-10),ylim = c(-60,15))
 plot(monkey_puzzle_SAm,col=&#39;blue&#39;,add=T)
 plot(r_monkey_puzzle, add=T, alpha=0.6, legend=F)</code></pre>
@@ -600,9 +607,9 @@ pinus &lt;- BIEN_ranges_load_species(pinus_names)
 
 # Format the column names and rasterise
 colnames(pinus@data) &lt;- &quot;binomial&quot;
-r_pinus &lt;- lets.presab(pinus, resol=1, xmn = -170, xmx = -10, ymn = -57, ymx = 60)</code></pre>
-<pre><code>## Warning in proj4string(obj): CRS object has comment, which is lost in output</code></pre>
-<pre class="r"><code># Plot species richness
+r_pinus &lt;- lets.presab(pinus, resol=1, xmn = -170, xmx = -10, ymn = -57, ymx = 60)
+
+# Plot species richness
 plot(r_pinus)</code></pre>
 <p><img src="4_SpeciesData_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
@@ -619,16 +626,16 @@ plot(r_pinus)</code></pre>
 
 # Check out the number of occurrences found in GBIF:
 occ_count()</code></pre>
-<pre><code>## [1] 1622555350</code></pre>
+<pre><code>## [1] 1635375194</code></pre>
 <pre class="r"><code># number of observations:
 occ_count(basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
-<pre><code>## [1] 19491876</code></pre>
+<pre><code>## [1] 18662662</code></pre>
 <pre class="r"><code># number of occurrences reported for Germany:
 occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;])</code></pre>
-<pre><code>## [1] 39649335</code></pre>
+<pre><code>## [1] 40934126</code></pre>
 <pre class="r"><code># number of observations reported for Germany:
 occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;],basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
-<pre><code>## [1] 246614</code></pre>
+<pre><code>## [1] 239352</code></pre>
 <p>As example, we will use the Alpine shrew (<em>Sorex alpinus</em>) again. We first check whether any synonyms exist and how many records exist for the species. Download will be slow for high numbers of records.</p>
 <pre class="r"><code># Check for synonyms
 name_suggest(q=&#39;Sorex alpinus&#39;, rank=&#39;species&#39;)
@@ -668,7 +675,7 @@ cl_gbif_shrew &lt;- clean_coordinates(gbif_shrew, lon=&quot;decimalLongitude&quo
 <pre><code>## Flagged 26 records.</code></pre>
 <pre><code>## Testing duplicates</code></pre>
 <pre><code>## Flagged 188 records.</code></pre>
-<pre><code>## Flagged 210 of 479 records, EQ = 0.44.</code></pre>
+<pre><code>## Flagged 210 of 483 records, EQ = 0.43.</code></pre>
 <pre class="r"><code>map(&#39;world&#39;,xlim=c(5,130), ylim=c(30,75))
 points(gbif_shrew$decimalLongitude, gbif_shrew$decimalLatitude, col=&#39;red&#39;,  pch=19)
 points(gbif_shrew$decimalLongitude[cl_gbif_shrew$.summary], gbif_shrew$decimalLatitude[cl_gbif_shrew$.summary], col=&#39;blue&#39;,  pch=18)</code></pre>
@@ -676,6 +683,14 @@ points(gbif_shrew$decimalLongitude[cl_gbif_shrew$.summary], gbif_shrew$decimalLa
 <pre class="r"><code># remove the flagged records
 gbif_shrew2 &lt;- gbif_shrew[cl_gbif_shrew$.summary,]</code></pre>
 <p>Have a look at Zizka et al. (2019) and the examples by Robert Hijmans (<a href="http://rspatial.org" class="uri">http://rspatial.org</a>) for finding out about other typical problems with GBIF and how to deal with these.</p>
+<div class="alert alert-info">
+<p><strong><em>Exercise:</em></strong></p>
+<p>Pick a species of your own choice, look up relevant information about this on the web, download the data from GBIF and clean them.</p>
+<ul>
+<li>Further explore additional arguments in <code>occ_search()</code>. For example, how can you restrict data download to specific months, years or regions?</li>
+<li>Further explore additional arguments in <code>clean_coordinates()</code>. For example, how can we test for records in the sea or the null island?</li>
+</ul>
+</div>
 </div>
 </div>
 <div id="obis-data" class="section level2">
@@ -756,7 +771,7 @@ otter2 &lt;- otter[cl_otter$.summary,]</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
