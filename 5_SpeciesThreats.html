@@ -25,8 +25,19 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -426,12 +437,7 @@ div.tocify {
 </ul>
 </div>
 <p>The IUCN Red List of threatened species is a useful resource when analysing diversity changes, species range changes and population changes: www.iucnredlist.org <span class="citation">(IUCN 2019)</span>. It provides information on the global conservation status of species, specifically of animals, fungi and plant species. The IUCN has defined a set of criteria to evaluate the extinction risk of species. According to these criteria, species are classified into nine different categories although strictly only five categories describe the conservation status - from least concern to critically endangered <span class="citation">(Fig. 1; IUCN 2012)</span>.</p>
-<div class="figure">
-<img src="figures/redlist.png" alt="**Figure 1. The IUCN red list categories. Adapted from [@IUCN2012].**" width="70%" />
-<p class="caption">
-<strong>Figure 1. The IUCN red list categories. Adapted from <span class="citation">(IUCN 2012)</span>.</strong>
-</p>
-</div>
+<p><img src="figures/redlist.png" title="**Figure 1. The IUCN red list categories. Adapted from [@IUCN2012].**" alt="**Figure 1. The IUCN red list categories. Adapted from [@IUCN2012].**" width="70%" /></p>
 <p>The IUCN distinguishes five criteria that are used to classify species into one of the three threatened categories (Fig. 1; <span class="citation">IUCN (2012)</span>):</p>
 <ul>
 <li>A. Population size reduction</li>
@@ -445,7 +451,7 @@ div.tocify {
 <p>I have got permission to use some red list information for the UK breeding birds in class, but I am not allowed to post them. Thus, course participants can download the data (<em>UK_birds_redlist_status.csv</em> and <em>UK_birds_redlist_threats.csv</em>) in the secured moodle folder (but please be aware that the <a href="https://www.iucnredlist.org/terms/terms-of-use">IUCN terms of use</a> apply!). External readers are advised to generate an API token:</p>
 <pre class="r"><code>library(rredlist)
 rl_use_iucn()</code></pre>
-<p>We will with the UK breeding bird data from practical 3 available <a href="https://damariszurell.github.io/EEC-Macro/data/UK_BBatlas_2008.csv">here</a>. If not already done so, please download the data and save them in an appropriate folder (e.g. in <em>data</em> folder).</p>
+<p>We will work with the UK breeding bird data from practical 3 available <a href="https://damariszurell.github.io/EEC-Macro/data/UK_BBatlas_2008.csv">here</a>. If not already done so, please download the data and save them in an appropriate folder (e.g. in <em>data</em> folder).</p>
 <pre class="r"><code># Read in the distribution dataset:
 bird_dist &lt;- read.table(&#39;data/UK_BBatlas_2008.csv&#39;,header=T, sep=&#39;,&#39;, stringsAsFactors = F)
 
@@ -514,19 +520,39 @@ redlist_status &lt;- do.call(rbind,lapply(spp,FUN=function(sp){rl_search(sp, key
 ## 8                TRUE BirdLife International              Westrip, J.
 ## 9                TRUE BirdLife International              Westrip, J.
 ## 10               TRUE BirdLife International               Hermes, C.</code></pre>
+<div id="task-1-analyse-iucn-population-trends" class="section level2">
+<h2><span class="header-section-number">1.1</span> Task 1: analyse IUCN population trends</h2>
+<p>We have seen that range size is an important factor for classifying species in a certain red list category. Here, I would like you to analyse population trends and range sizes. The necessary information are contained in the red list status data frame. Of course, the extent of occurrance (eoo) specified in the table relates to the global range size of the species. Additionally, you can calculate the range sizes in UK from the available distribution data.</p>
 <div class="alert alert-info">
-<p><strong>Task 1:</strong></p>
-<p>Analyse IUCN population trends and range sizes:</p>
-<p>Relate population trend to range sizes (extent of occurrence, EOO). The data are contained in the red list status data frame. You can also calculate British range sizes and use these for the analyses.</p>
-<p>Are species with small ranges exhibting stronger population declines?</p>
+<p><strong>Summary Task 1: analyse IUCN population trends and range sizes</strong></p>
+<ul>
+<li>Relate population trend to global range sizes (extent of occurrence, EOO) and to British range sizes.</li>
+<li>Are species with small ranges globally or in UK exhibting stronger population declines? Discuss.</li>
+</ul>
 </div>
-<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+</div>
+<div id="task-2-map-distribution-of-threats" class="section level2">
+<h2><span class="header-section-number">1.2</span> Task 2: map distribution of threats</h2>
+<p>Next, I would like to analyse the distribution of threatened species. You find the relevant red list information in the data frame on the red list status. You have to combine this red list information with the distribution data. To this end, you will have to extract all species that belong to a specific threat category, then compute the species richness of these species per cell and map this.</p>
+<p>For example, you can extract all species that are classified as vulnerable:</p>
+<pre class="r"><code>subset(redlist_status,category==&#39;VU&#39;)$scientific_name</code></pre>
+<pre><code>##  [1] &quot;Podiceps auritus&quot;            &quot;Anser erythropus&quot;           
+##  [3] &quot;Branta ruficollis&quot;           &quot;Aythya ferina&quot;              
+##  [5] &quot;Polysticta stelleri&quot;         &quot;Clangula hyemalis&quot;          
+##  [7] &quot;Melanitta fusca&quot;             &quot;Otis tarda&quot;                 
+##  [9] &quot;Rissa tridactyla&quot;            &quot;Fratercula arctica&quot;         
+## [11] &quot;Streptopelia turtur&quot;         &quot;Bubo scandiacus&quot;            
+## [13] &quot;Emberiza rustica&quot;            &quot;Marmaronetta angustirostris&quot;
+## [15] &quot;Branta sandvicensis&quot;         &quot;Syrmaticus reevesii&quot;</code></pre>
 <div class="alert alert-info">
-<p><strong>Task 2:</strong></p>
-<p>Map species richness for different red list categories:</p>
-<p>Map species richness of all species belonging to a threatened category (CR, EN, VU) and of all species belonging to a non-threatened category (NT, LC). YOu find the relevant red list information in the data frame on the red list status. You have to combine this information with the distribution data.</p>
+<p><strong>Summary Task 2: map distribution of threats</strong></p>
+<ul>
+<li>Map species richness of all species belonging to one of the threatened categories (CR, EN, VU) and species richness of all species belonging to one of the non-threatened categories (NT, LC). Discuss the patterns.</li>
+</ul>
 </div>
-<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
 </div>
 <div id="red-list-threats" class="section level1">
 <h1><span class="header-section-number">2</span> Red list threats</h1>
@@ -565,44 +591,164 @@ redlist_threats &lt;- do.call(rbind,lapply(seq_len(length(spp)),FUN=function(i){
 </ul>
 <p>Here is an example of the kind of information in the table. For more details, please have a look at the IUCN website, e.g. the <a href="https://www.iucnredlist.org/species/22728432/132658315#conservation-actions">Balearic Shearwater</a> example, and at the <a href="https://www.iucnredlist.org/resources/threat-classification-scheme">Threat Classification Scheme</a>.</p>
 <pre class="r"><code>redlist_threats[sample(nrow(redlist_threats),10),-c(1:2)]</code></pre>
-<pre><code>##       code                                                    title  timing
-## 1199 5.4.4           Unintentional effects: (large scale) [harvest] Ongoing
-## 753  2.1.3                                    Agro-industry farming Ongoing
-## 245  5.1.2        Unintentional effects (species is not the target) Ongoing
-## 1455 8.1.2                  Named species (Cyathostoma bronchialis) Ongoing
-## 77     8.1 Invasive non-native/alien species/diseases (Felis catus) Ongoing
-## 100  9.6.1                                          Light pollution Ongoing
-## 1062   5.1                   Hunting &amp; trapping terrestrial animals Ongoing
-## 1155   6.1                                  Recreational activities Ongoing
-## 168    5.1                   Hunting &amp; trapping terrestrial animals Ongoing
-## 1041   7.3                            Other ecosystem modifications Ongoing
-##                  scope                   severity            score
-## 1199 Majority (50-90%) Slow, Significant Declines Medium Impact: 6
-## 753  Majority (50-90%) Slow, Significant Declines Medium Impact: 6
-## 245    Minority (&lt;50%)        Negligible declines    Low Impact: 4
-## 1455 Majority (50-90%)        Negligible declines    Low Impact: 5
-## 77     Minority (&lt;50%)        Negligible declines    Low Impact: 4
-## 100    Minority (&lt;50%)        Negligible declines    Low Impact: 4
-## 1062   Minority (&lt;50%) Slow, Significant Declines    Low Impact: 5
-## 1155   Minority (&lt;50%)        Negligible declines    Low Impact: 4
-## 168    Minority (&lt;50%) Slow, Significant Declines    Low Impact: 5
-## 1041      Whole (&gt;90%) Slow, Significant Declines Medium Impact: 7
-##                     invasive
-## 1199                    &lt;NA&gt;
-## 753                     &lt;NA&gt;
-## 245                     &lt;NA&gt;
-## 1455 Cyathostoma bronchialis
-## 77               Felis catus
-## 100                     &lt;NA&gt;
-## 1062                    &lt;NA&gt;
-## 1155                    &lt;NA&gt;
-## 168                     &lt;NA&gt;
-## 1041                    &lt;NA&gt;</code></pre>
-<p>Now, I would like you to analyse the frequency of different threats and the geographic patterns of threats.</p>
+<pre><code>##       code                                   title  timing             scope
+## 553  5.1.3                     Persecution/control Ongoing Majority (50-90%)
+## 869  9.2.1                              Oil spills Ongoing   Minority (&lt;50%)
+## 1005   2.4         Marine &amp; freshwater aquaculture Ongoing   Minority (&lt;50%)
+## 641    6.1                 Recreational activities Ongoing   Minority (&lt;50%)
+## 17     5.1  Hunting &amp; trapping terrestrial animals Ongoing   Minority (&lt;50%)
+## 1398   5.1  Hunting &amp; trapping terrestrial animals Ongoing   Minority (&lt;50%)
+## 742  5.1.1 Intentional use (species is the target) Ongoing Majority (50-90%)
+## 1527   5.3               Logging &amp; wood harvesting Ongoing Majority (50-90%)
+## 363  8.2.2          Named species (Vulpes lagopus) Ongoing   Minority (&lt;50%)
+## 427  9.2.1                              Oil spills Ongoing Majority (50-90%)
+##                        severity            score       invasive
+## 553         Negligible declines    Low Impact: 5           &lt;NA&gt;
+## 869  Slow, Significant Declines    Low Impact: 5           &lt;NA&gt;
+## 1005 Slow, Significant Declines    Low Impact: 5           &lt;NA&gt;
+## 641         Negligible declines    Low Impact: 4           &lt;NA&gt;
+## 17               Rapid Declines Medium Impact: 6           &lt;NA&gt;
+## 1398        Negligible declines    Low Impact: 4           &lt;NA&gt;
+## 742  Slow, Significant Declines             &lt;NA&gt;           &lt;NA&gt;
+## 1527 Slow, Significant Declines Medium Impact: 6           &lt;NA&gt;
+## 363         Negligible declines    Low Impact: 4 Vulpes lagopus
+## 427  Slow, Significant Declines Medium Impact: 6           &lt;NA&gt;</code></pre>
+<div id="task-3-analyse-major-threat-categories" class="section level2">
+<h2><span class="header-section-number">2.1</span> Task 3: analyse major threat categories</h2>
+<p>Now, I would like you to analyse the frequency of different threats in different time periods, in particular assessing how many species are facing threats in the different time periods and which threats are most frequent over all the species. The IUCN distinguishes threats that have occurred in the past (and are likely or unlikely to return, respectively), that are ongoing or that are likely to occur in the future. This information can be extracted from the red list threats table (the column “timing”). Thus, to solve this task, you first have to subset the table to the time period of interest, for example:</p>
+<pre class="r"><code>(past_threats &lt;- subset(redlist_threats, species %in% spp &amp; (timing==&#39;Past, Unlikely to Return&#39; | timing==&#39;Past, Likely to Return&#39;)))</code></pre>
+<pre><code>##                   species speccode  code
+## 61   Podiceps nigricollis       10  11.5
+## 116     Puffinus puffinus       18   8.1
+## 119     Puffinus puffinus       18 8.1.2
+## 144         Ardea cinerea       39   5.1
+## 146         Ardea cinerea       39 5.1.3
+## 202    Tadorna ferruginea       60   1.1
+## 215    Tadorna ferruginea       60   8.5
+## 216    Tadorna ferruginea       60 8.5.2
+## 224       Mareca penelope       64   8.5
+## 225       Mareca penelope       64 8.5.2
+## 251   Spatula querquedula       72   8.1
+## 253   Spatula querquedula       72 8.1.2
+## 256   Spatula querquedula       72   8.5
+## 258   Spatula querquedula       72 8.5.2
+## 570           Buteo buteo      110   8.5
+## 571           Buteo buteo      110 8.5.2
+## 632     Falco columbarius      119   9.3
+## 633     Falco columbarius      119 9.3.4
+## 685      Falco peregrinus      124   9.3
+## 686      Falco peregrinus      124 9.3.3
+## 730           Fulica atra      145   8.5
+## 731           Fulica atra      145 8.5.2
+## 970       Calidris alpina      186   8.5
+## 971       Calidris alpina      186 8.5.2
+## 972       Calidris alpina      186   9.2
+## 973       Calidris alpina      186 9.2.1
+## 1297      Riparia riparia      321  11.2
+## 1316    Oenanthe oenanthe      357  11.2
+##                                                                   title
+## 61                                                        Other impacts
+## 116         Invasive non-native/alien species/diseases (Sus domesticus)
+## 119                                      Named species (Sus domesticus)
+## 144                              Hunting &amp; trapping terrestrial animals
+## 146                                                 Persecution/control
+## 202                                               Housing &amp; urban areas
+## 215                                        Viral/prion-induced diseases
+## 216                                                       Named species
+## 224                                        Viral/prion-induced diseases
+## 225                                                       Named species
+## 251  Invasive non-native/alien species/diseases (Clostridium botulinum)
+## 253                               Named species (Clostridium botulinum)
+## 256                                        Viral/prion-induced diseases
+## 258                                                       Named species
+## 570                                        Viral/prion-induced diseases
+## 571                                                       Named species
+## 632                                   Agricultural &amp; forestry effluents
+## 633                                             Type Unknown/Unrecorded
+## 685                                   Agricultural &amp; forestry effluents
+## 686                                           Herbicides and pesticides
+## 730                                        Viral/prion-induced diseases
+## 731                                                       Named species
+## 970                                        Viral/prion-induced diseases
+## 971                                                       Named species
+## 972                                     Industrial &amp; military effluents
+## 973                                                          Oil spills
+## 1297                                                           Droughts
+## 1316                                                           Droughts
+##                        timing             scope                   severity
+## 61     Past, Likely to Return   Minority (&lt;50%)        Negligible declines
+## 116  Past, Unlikely to Return   Minority (&lt;50%)             Rapid Declines
+## 119  Past, Unlikely to Return   Minority (&lt;50%)             Rapid Declines
+## 144    Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+## 146    Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+## 202    Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+## 215    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 216    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 224    Past, Likely to Return   Minority (&lt;50%)             Rapid Declines
+## 225    Past, Likely to Return   Minority (&lt;50%)             Rapid Declines
+## 251    Past, Likely to Return   Minority (&lt;50%)        Negligible declines
+## 253    Past, Likely to Return   Minority (&lt;50%)        Negligible declines
+## 256    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 258    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 570    Past, Likely to Return   Minority (&lt;50%)             Rapid Declines
+## 571    Past, Likely to Return   Minority (&lt;50%)             Rapid Declines
+## 632  Past, Unlikely to Return Majority (50-90%) Slow, Significant Declines
+## 633  Past, Unlikely to Return Majority (50-90%) Slow, Significant Declines
+## 685    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 686    Past, Likely to Return Majority (50-90%) Slow, Significant Declines
+## 730    Past, Likely to Return Majority (50-90%)             Rapid Declines
+## 731    Past, Likely to Return Majority (50-90%)             Rapid Declines
+## 970  Past, Unlikely to Return Majority (50-90%) Slow, Significant Declines
+## 971  Past, Unlikely to Return Majority (50-90%) Slow, Significant Declines
+## 972    Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+## 973    Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+## 1297   Past, Likely to Return   Minority (&lt;50%)             Rapid Declines
+## 1316   Past, Likely to Return   Minority (&lt;50%) Slow, Significant Declines
+##            score              invasive
+## 61   Past Impact                  &lt;NA&gt;
+## 116  Past Impact        Sus domesticus
+## 119  Past Impact        Sus domesticus
+## 144  Past Impact                  &lt;NA&gt;
+## 146  Past Impact                  &lt;NA&gt;
+## 202  Past Impact                  &lt;NA&gt;
+## 215  Past Impact                  &lt;NA&gt;
+## 216  Past Impact                  &lt;NA&gt;
+## 224  Past Impact                  &lt;NA&gt;
+## 225  Past Impact                  &lt;NA&gt;
+## 251  Past Impact Clostridium botulinum
+## 253  Past Impact Clostridium botulinum
+## 256  Past Impact                  &lt;NA&gt;
+## 258  Past Impact                  &lt;NA&gt;
+## 570  Past Impact                  &lt;NA&gt;
+## 571  Past Impact                  &lt;NA&gt;
+## 632  Past Impact                  &lt;NA&gt;
+## 633  Past Impact                  &lt;NA&gt;
+## 685  Past Impact                  &lt;NA&gt;
+## 686  Past Impact                  &lt;NA&gt;
+## 730  Past Impact                  &lt;NA&gt;
+## 731  Past Impact                  &lt;NA&gt;
+## 970  Past Impact                  &lt;NA&gt;
+## 971  Past Impact                  &lt;NA&gt;
+## 972  Past Impact                  &lt;NA&gt;
+## 973  Past Impact                  &lt;NA&gt;
+## 1297 Past Impact                  &lt;NA&gt;
+## 1316 Past Impact                  &lt;NA&gt;</code></pre>
+<p>Some species are threatened by multiple threats. To analyse the total number of species threatened in the different time periods, you have to find the unique species names:</p>
+<pre class="r"><code># Species that have been affected by specific threats in the past:
+unique(past_threats$species)</code></pre>
+<pre><code>##  [1] &quot;Podiceps nigricollis&quot; &quot;Puffinus puffinus&quot;    &quot;Ardea cinerea&quot;       
+##  [4] &quot;Tadorna ferruginea&quot;   &quot;Mareca penelope&quot;      &quot;Spatula querquedula&quot; 
+##  [7] &quot;Buteo buteo&quot;          &quot;Falco columbarius&quot;    &quot;Falco peregrinus&quot;    
+## [10] &quot;Fulica atra&quot;          &quot;Calidris alpina&quot;      &quot;Riparia riparia&quot;     
+## [13] &quot;Oenanthe oenanthe&quot;</code></pre>
+<pre class="r"><code># Number of species
+length(unique(past_threats$species))</code></pre>
+<pre><code>## [1] 13</code></pre>
+<p>Last, you can also combine the information from the red list status table and the red list threat table, and assess what are the most important threats of those spcies exhibiting population declines.</p>
 <div class="alert alert-info">
-<p><strong>Task 3:</strong></p>
-<p>Analyse major threat categories:</p>
+<p><strong>Summary Task 3: analyse major threat categories</strong></p>
 <ul>
+<li>How many British breeding bird species have been effected by specific threats in the past, today, and in the future</li>
 <li>What are the five most important threats for the birds breeding in Britain - in the past, today, and in the future?</li>
 <li>What are the five most important threats for the breeding birds experiencing population declines?</li>
 </ul>
@@ -610,57 +756,33 @@ redlist_threats &lt;- do.call(rbind,lapply(seq_len(length(spp)),FUN=function(i){
 </div>
 <pre><code>## [1] &quot;Past&quot;</code></pre>
 <pre><code>## 
-##                     Named species      Viral/prion-induced diseases 
-##                                 6                                 6 
-## Agricultural &amp; forestry effluents                          Droughts 
-##                                 2                                 2 
-##         Herbicides and pesticides             Housing &amp; urban areas 
-##                                 1                                 1</code></pre>
+##   8.5 8.5.2  11.2   8.1 8.1.2   9.3 
+##     6     6     2     2     2     2</code></pre>
 <pre><code>## [1] &quot;Ongoing&quot;</code></pre>
 <pre><code>## 
-##         Hunting &amp; trapping terrestrial animals 
-##                                             58 
-##        Intentional use (species is the target) 
-##                                             35 
-##                Industrial &amp; military effluents 
-##                                             23 
-##         Fishing &amp; harvesting aquatic resources 
-##                                             21 
-##                               Renewable energy 
-##                                             21 
-## Unintentional effects: (large scale) [harvest] 
-##                                             21</code></pre>
+##   5.1   8.1 5.1.1 8.1.2   8.2   9.2 
+##    58    38    35    32    26    23</code></pre>
 <pre><code>## [1] &quot;Future&quot;</code></pre>
 <pre><code>## 
-##                                      Habitat shifting &amp; alteration 
-##                                                                 24 
-##                                                      Named species 
-##                                                                  5 
-##                                       Viral/prion-induced diseases 
-##                                                                  5 
-## Invasive non-native/alien species/diseases (Clostridium botulinum) 
-##                                                                  3 
-##                              Named species (Clostridium botulinum) 
-##                                                                  3 
-##                                        Dams &amp; water management/use 
-##                                                                  2</code></pre>
+##  11.1   8.5 8.5.2   8.1 8.1.2   7.2 
+##    24     5     5     3     3     2</code></pre>
 <pre><code>## [1] &quot;Declining species&quot;</code></pre>
 <pre><code>## 
-##  Hunting &amp; trapping terrestrial animals Intentional use (species is the target) 
-##                                      28                                      18 
-##     Annual &amp; perennial non-timber crops                   Agro-industry farming 
-##                                      15                                      14 
-##         Industrial &amp; military effluents                 Recreational activities 
-##                                      12                                      11</code></pre>
+##   5.1   8.1   8.2 5.1.1 8.1.2 8.2.2 
+##    28    19    19    18    16    16</code></pre>
+</div>
+<div id="task-4-map-hotspots-of-threats" class="section level2">
+<h2><span class="header-section-number">2.2</span> Task 4: map hotspots of threats</h2>
+<p>We can also analyse the spatial distribution of threats. To do so, you have to extract the species that are affected by a particular threat in a particular time period. Then you can extract the distribution data for these species, compute the species richness and map this in space.</p>
 <div class="alert alert-info">
-<p><strong>Task 4:</strong></p>
-<p>Map hotspots of threats:</p>
+<p><strong>Summary Task 4: map hotspots of threats</strong></p>
 <ul>
-<li>Pick two of the most important threat categories and map the species richness of breeding birds for these threats (seperately!)</li>
+<li>Pick two of the most important ongoing threats and map the species richness of those breeding birds affected by these threats (seperately!)</li>
 </ul>
 <p>Interpret.</p>
 </div>
-<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-16-1.png" width="672" /><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-19-1.png" width="672" /><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -695,7 +817,7 @@ redlist_threats &lt;- do.call(rbind,lapply(seq_len(length(spp)),FUN=function(i){
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
