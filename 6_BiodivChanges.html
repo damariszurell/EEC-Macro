@@ -501,7 +501,23 @@ plot(rasterFromXYZ(birds_68[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;richnes
 <div id="task-1-map-species-richness-changes" class="section level2">
 <h2><span class="header-section-number">1.1</span> Task 1: map species richness changes</h2>
 <p>In order to compare species richness across time periods, you have to compute and map species richness for each sampling period. Then, you can calculate the differences in species richness between these periods.</p>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-3-1.png" width="672" /><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<p>I give you a few hints how I made the plots below. I mapped species richness by first making stacks of species richness for the different time periods and then used the function <code>ssplot()</code> to produce the three adjacent maps. Of course you can also produce three seperate maps and put them next to each other by using the function <code>par(mfrow=c(1,3)</code>.</p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>For the plot of species richness differences, I define my own colour palette. First, you have to produce a raster that shows the difference in species richness between two periods. Let us assume you call this raster <code>change_richness</code>. Then you can procude the plot using this code:</p>
+<pre class="r"><code>#------
+# Map species richness differences
+par(mfrow=c(1,3))
+
+# Define axis for colour breaks
+brks_diff &lt;- seq(-50,50,by=5)
+# Define colour palette
+cols.diff = colorRampPalette(rev(c(&#39;#650A13&#39;,&#39;#b2182b&#39;,&#39;#d6604d&#39;,&#39;#f4a582&#39;,&#39;grey90&#39;,&#39;#92c5de&#39;,&#39;#4393c3&#39;,&#39;#2166ac&#39;,&#39;#0B2F52&#39;)))(21) # red-blue diverging
+
+# Plot the species richness change between 1968 and 2011
+plot(change_richness, axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-50,50), main=&#39;Species richness change \n1968 - 2011&#39;)
+
+# plot the other two maps ...</code></pre>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <div class="alert alert-info">
 <p><strong>Summary Task 1: map species richness changes</strong></p>
 <ul>
@@ -546,7 +562,7 @@ birds_68$sr_accipiter &lt;- rowSums(birds_68[,accipiter_spp])
 
 # Map ACCIPITRIFORMES species richness
 plot(rasterFromXYZ(birds_68[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]), main=&quot;Richness ACCIPITRIFORMES&quot;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Similar to the first task, we can compute species richness for the different time periods and assess the changes in species richness.</p>
 <pre class="r"><code># Map species richness
 bird_dist$sr_accipiter &lt;- rowSums(bird_dist[,accipiter_spp])
@@ -557,19 +573,26 @@ spplot(stack(
   rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)])),
   names.attr = c(&#39;1968-72&#39;,&#39;1988-91&#39;,&#39;2008-11&#39;), main=&#39;Richness ACCIPITRIFORMES&#39;
   )</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>#------
 # Map species richness differences
-par(mfrow=c(1,3))
+par(mfrow=c(1,3))   # make three panels
+
+# we define our own colour palette
 brks_diff &lt;- seq(-5,5,by=5)
 cols.diff = colorRampPalette(rev(c(&#39;#650A13&#39;,&#39;#b2182b&#39;,&#39;#d6604d&#39;,&#39;#f4a582&#39;,&#39;grey90&#39;,&#39;#92c5de&#39;,&#39;#4393c3&#39;,&#39;#2166ac&#39;,&#39;#0B2F52&#39;)))(21) # red-blue diverging
-plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1968 - 2011&#39;)
-plot(rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1968 - 1991&#39;)
-plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1988 - 2011&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
-<pre class="r"><code>par(mfrow=c(1,1))
 
-#----------------------
+# map the differences in species richness between the different time periods
+diff_1968_2011 &lt;- rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)])
+plot(diff_1968_2011, axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1968 - 2011&#39;)
+
+diff_1968_1991 &lt;- rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)])
+plot(diff_1968_1991, axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1968 - 1991&#39;)
+
+diff_1988_2011 &lt;- rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_accipiter&#39;)])
+plot(diff_1988_2011, axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-5,5), main=&#39;ACCIPITRIFORMES \nSpecies richness change \n1988 - 2011&#39;)</code></pre>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre class="r"><code>#----------------------
 # Extract species belonging to the order PASSERIFORMES:
 passerine_spp &lt;- subset(redlist_status,order==&#39;PASSERIFORMES&#39;)$scientific_name
 passerine_spp &lt;- sub(&#39; &#39;,&#39;_&#39;, passerine_spp)
@@ -583,43 +606,19 @@ spplot(stack(
   rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)])),
   names.attr = c(&#39;1968-72&#39;,&#39;1988-91&#39;,&#39;2008-11&#39;), main=&#39;Richness PASSERIFORMES&#39;
   )</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 <pre class="r"><code>#------
 # Map species richness differences
 par(mfrow=c(1,3))
+
 brks_diff &lt;- seq(-35,35,by=5)
 cols.diff = colorRampPalette(rev(c(&#39;#650A13&#39;,&#39;#b2182b&#39;,&#39;#d6604d&#39;,&#39;#f4a582&#39;,&#39;grey90&#39;,&#39;#92c5de&#39;,&#39;#4393c3&#39;,&#39;#2166ac&#39;,&#39;#0B2F52&#39;)))(21) # red-blue diverging
+
+# different from above, we simultaneously produce and plot the rasters:
 plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-35,35), main=&#39;PASSERIFORMES \nSpecies richness change \n1968 - 2011&#39;)
 plot(rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-35,35), main=&#39;PASSERIFORMES \nSpecies richness change \n1968 - 1991&#39;)
 plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_passerine&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-35,35), main=&#39;PASSERIFORMES \nSpecies richness change \n1988 - 2011&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-8-4.png" width="672" /></p>
-<pre class="r"><code>par(mfrow=c(1,1))
-
-# #----------------------
-# # ANSERIFORMES 
-# # Extract species belonging to the order PASSERIFORMES:
-# anser_spp &lt;- subset(redlist_status,order==&#39;ANSERIFORMES&#39;)$scientific_name
-# anser_spp &lt;- sub(&#39; &#39;,&#39;_&#39;, anser_spp)
-# 
-# # Map species richness
-# bird_dist$sr_anser &lt;- rowSums(bird_dist[,anser_spp])
-# 
-# spplot(stack(
-#   rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]),
-#   rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]),
-#   rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)])),
-#   names.attr = c(&#39;1968-72&#39;,&#39;1988-91&#39;,&#39;2008-11&#39;), main=&#39;Richness ANSERIFORMES&#39;
-#   )
-# 
-# #------
-# # Map species richness differences
-# par(mfrow=c(1,3))
-# brks_diff &lt;- seq(-15,15,by=5)
-# cols.diff = colorRampPalette(rev(c(&#39;#650A13&#39;,&#39;#b2182b&#39;,&#39;#d6604d&#39;,&#39;#f4a582&#39;,&#39;grey90&#39;,&#39;#92c5de&#39;,&#39;#4393c3&#39;,&#39;#2166ac&#39;,&#39;#0B2F52&#39;)))(21) # red-blue diverging
-# plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-15,15), main=&#39;ANSERIFORMES \nSpecies richness change \n1968 - 2011&#39;)
-# plot(rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1968-72&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-15,15), main=&#39;ANSERIFORMES \nSpecies richness change \n1968 - 1991&#39;)
-# plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]) - rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;sr_anser&#39;)]), axes=F,  col=cols.diff, lab.breaks=brks.diff, zlim=c(-15,15), main=&#39;ANSERIFORMES \nSpecies richness change \n1988 - 2011&#39;)
-# par(mfrow=c(1,1))</code></pre>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
 <div class="alert alert-info">
 <p><strong>Summary Task 2: map taxon-specific species richness changes</strong></p>
 <ul>
@@ -660,7 +659,7 @@ for (t in c(&#39;1968-72&#39;, &#39;1988-91&#39;, &#39;2008-11&#39;)) {
 # plot changes in range size
 library(ggplot2)
 ggplot(data = acrocepha_rangesize, mapping = aes(x = rep(c(1968,1988,2008),4), y = log(rangesize), color=species)) + geom_line() + geom_point() + xlab(&#39;Year&#39;) + ylab(&#39;log(Range size [km^2])&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>We can also look at positions of range centres or boundaries. For simplicity, let’s analyses only the latitudinal (south-north) shifts.</p>
 <pre class="r"><code># Make data frame for storing the range positions
 acrocepha_rangelimits &lt;- data.frame(expand.grid(period=c(&#39;1968-72&#39;, &#39;1988-91&#39;, &#39;2008-11&#39;), species=acrocepha_spp), rangecentre=NA, leading_edge=NA)
@@ -678,9 +677,9 @@ for (t in c(&#39;1968-72&#39;, &#39;1988-91&#39;, &#39;2008-11&#39;)) {
 
 # plot changes in range positions
 ggplot(data = acrocepha_rangelimits, mapping = aes(x = rep(c(1968,1988,2008),4), y = rangecentre, color=species)) + geom_line() + geom_point() + xlab(&#39;Year&#39;) + ylab(&#39;Range centre (Northing)&#39;) + ggtitle(&#39;Range centre&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(data = acrocepha_rangelimits, mapping = aes(x = rep(c(1968,1988,2008),4), y = leading_edge, color=species)) + geom_line() + geom_point() + xlab(&#39;Year&#39;) + ylab(&#39;Range centre (Northing)&#39;) + ggtitle(&#39;Leading range edge&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <div class="alert alert-info">
 <p><strong>Summary Task 3: quantify species range changes</strong></p>
 <ul>
@@ -697,7 +696,7 @@ sedge_88 &lt;- rasterFromXYZ(subset(bird_dist,period==&#39;1988-91&#39;)[,c(&#39
 sedge_08 &lt;- rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;Acrocephalus_schoenobaenus&#39;)])
 
 spplot(stack(sedge_68, sedge_88, sedge_08))</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <pre class="r"><code># Compute differences. To distinguish clearly where cells are colonised or decolonised, we assign occurrences in 1968 a value=1 and occurrence in 2008 a value=2:
 temp &lt;- sedge_08
 values(temp)[values(temp)&gt;0 &amp; !is.na(values(temp))] &lt;- 2
@@ -712,9 +711,9 @@ levels(temp_diff_f) &lt;- rat
 library(rasterVis)
 custom.pal &lt;- c(&quot;grey75&quot;, &quot;coral&quot;, &quot;cyan3&quot;,&quot;grey25&quot;)
 levelplot(temp_diff_f, margin=F, scales=list(draw=FALSE),col.regions=custom.pal,main=&#39;Sedge warbler range change (1968-2011)&#39;)</code></pre>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
 <p>Even more insights can be gained by mapping the differences over all time periods.</p>
-<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <div class="alert alert-info">
 <p><strong>Summary Task 4: map species range changes</strong></p>
 <ul>
