@@ -25,8 +25,19 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -385,12 +396,6 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="mailto:damaris@zurell.de">
-    <span class="fa fa-envelope"></span>
-     
-  </a>
-</li>
-<li>
   <a href="https://damariszurell.github.io">
     <span class="fa fa-home"></span>
      
@@ -642,8 +647,9 @@ values(r2) &lt;- 1:ncell(r2)
 <p>In most cases, we will read in raster data from file. For this we can use the same commands as above, <code>raster()</code> for reading in single-layer raster files and <code>stack()</code> or <code>brick()</code> for reading in multi-layer raster files.</p>
 <p>First, download the temperature map for UK <a href="https://damariszurell.github.io/EEC-Macro/data/UK_temp.tif">here</a> to your data folder and read it in. The raster layer represents the mean annual in temperature [°C * 10].</p>
 <pre class="r"><code>(temp &lt;- raster(&#39;data/UK_temp.tif&#39;))</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded
-## datum Unknown based on Airy 1830 ellipsoid in CRS definition</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;, prefer_proj
+## = prefer_proj): Discarded datum Unknown based on Airy 1830 ellipsoid in CRS
+## definition</code></pre>
 <pre><code>## class      : RasterLayer 
 ## dimensions : 122, 66, 8052  (nrow, ncol, ncell)
 ## resolution : 10000, 10000  (x, y)
@@ -656,13 +662,13 @@ values(r2) &lt;- 1:ncell(r2)
 <p><img src="2_SpatialData_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>Second, download the <a href="https://damariszurell.github.io/EEC-Macro/data/UK_bioclim.zip">zip folder</a> containing multi-layer raster data for 19 bioclimatic variables of UK, and unzip in your data folder. It contains two files. The file ending “*.grd” represents the natural file ending for files created using the <code>raster</code> package. It needs to be accompanied by a file ending on “*.gri”, which contains all the cell attributes. The bioclimatic variables are explained <a href="">here</a><a href="https://www.worldclim.org/data/bioclim.html" class="uri">https://www.worldclim.org/data/bioclim.html</a>.</p>
 <pre class="r"><code>(bioclim &lt;- stack(&#39;data/UK_bioclim.grd&#39;))</code></pre>
-<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;): Discarded datum OSGB_1936 in CRS definition,
-##  but +towgs84= values preserved</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = &quot;PROJ&quot;, multiline = &quot;NO&quot;, prefer_proj =
+## prefer_proj): Discarded datum OSGB 1936 in CRS definition</code></pre>
 <pre><code>## class      : RasterStack 
 ## dimensions : 122, 66, 8052, 19  (nrow, ncol, ncell, nlayers)
 ## resolution : 10000, 10000  (x, y)
 ## extent     : 0, 660000, 0, 1220000  (xmin, xmax, ymin, ymax)
-## crs        : +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.1502,0.247,0.8421,-20.4894 +units=m +no_defs 
+## crs        : +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs 
 ## names      :       bio1,       bio2,       bio3,       bio4,       bio5,       bio6,       bio7,       bio8,       bio9,      bio10,      bio11,      bio12,      bio13,      bio14,      bio15, ... 
 ## min values :   35.71785,   41.00000,   30.00000, 3060.24494,  134.00000,  -55.48918,  129.84425,  -12.39841,   35.62245,  102.15461,  -23.39841,  537.64811,   52.00000,   31.00000,    7.51282, ... 
 ## max values :  112.00000,   82.64219,   40.00000, 5321.53380,  231.58053,   43.00000,  228.91180,  162.73290,  152.06476,  173.57946,   70.00000, 2050.48998,  258.60188,  104.93003,   32.00000, ...</code></pre>
@@ -753,7 +759,7 @@ raster::extract(temp_eur, lonlat)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

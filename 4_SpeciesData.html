@@ -396,12 +396,6 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="mailto:damaris@zurell.de">
-    <span class="fa fa-envelope"></span>
-     
-  </a>
-</li>
-<li>
   <a href="https://damariszurell.github.io">
     <span class="fa fa-home"></span>
      
@@ -626,16 +620,16 @@ plot(r_pinus)</code></pre>
 
 # Check out the number of occurrences found in GBIF:
 occ_count()</code></pre>
-<pre><code>## [1] 1635375194</code></pre>
+<pre><code>## [1] 1644940485</code></pre>
 <pre class="r"><code># number of observations:
 occ_count(basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
-<pre><code>## [1] 18662662</code></pre>
+<pre><code>## [1] 18458886</code></pre>
 <pre class="r"><code># number of occurrences reported for Germany:
 occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;])</code></pre>
-<pre><code>## [1] 40934126</code></pre>
+<pre><code>## [1] 41809205</code></pre>
 <pre class="r"><code># number of observations reported for Germany:
 occ_count(country=isocodes[grep(&quot;Germany&quot;, isocodes$name), &quot;code&quot;],basisOfRecord=&#39;OBSERVATION&#39;)</code></pre>
-<pre><code>## [1] 239352</code></pre>
+<pre><code>## [1] 289572</code></pre>
 <p>As example, we will use the Alpine shrew (<em>Sorex alpinus</em>) again. We first check whether any synonyms exist and how many records exist for the species. Download will be slow for high numbers of records.</p>
 <pre class="r"><code># Check for synonyms
 name_suggest(q=&#39;Sorex alpinus&#39;, rank=&#39;species&#39;)

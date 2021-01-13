@@ -396,12 +396,6 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="mailto:damaris@zurell.de">
-    <span class="fa fa-envelope"></span>
-     
-  </a>
-</li>
-<li>
   <a href="https://damariszurell.github.io">
     <span class="fa fa-home"></span>
      
@@ -591,28 +585,28 @@ redlist_threats &lt;- do.call(rbind,lapply(seq_len(length(spp)),FUN=function(i){
 </ul>
 <p>Here is an example of the kind of information in the table. For more details, please have a look at the IUCN website, e.g. the <a href="https://www.iucnredlist.org/species/22728432/132658315#conservation-actions">Balearic Shearwater</a> example, and at the <a href="https://www.iucnredlist.org/resources/threat-classification-scheme">Threat Classification Scheme</a>.</p>
 <pre class="r"><code>redlist_threats[sample(nrow(redlist_threats),10),-c(1:2)]</code></pre>
-<pre><code>##       code                                   title  timing             scope
-## 553  5.1.3                     Persecution/control Ongoing Majority (50-90%)
-## 869  9.2.1                              Oil spills Ongoing   Minority (&lt;50%)
-## 1005   2.4         Marine &amp; freshwater aquaculture Ongoing   Minority (&lt;50%)
-## 641    6.1                 Recreational activities Ongoing   Minority (&lt;50%)
-## 17     5.1  Hunting &amp; trapping terrestrial animals Ongoing   Minority (&lt;50%)
-## 1398   5.1  Hunting &amp; trapping terrestrial animals Ongoing   Minority (&lt;50%)
-## 742  5.1.1 Intentional use (species is the target) Ongoing Majority (50-90%)
-## 1527   5.3               Logging &amp; wood harvesting Ongoing Majority (50-90%)
-## 363  8.2.2          Named species (Vulpes lagopus) Ongoing   Minority (&lt;50%)
-## 427  9.2.1                              Oil spills Ongoing Majority (50-90%)
-##                        severity            score       invasive
-## 553         Negligible declines    Low Impact: 5           &lt;NA&gt;
-## 869  Slow, Significant Declines    Low Impact: 5           &lt;NA&gt;
-## 1005 Slow, Significant Declines    Low Impact: 5           &lt;NA&gt;
-## 641         Negligible declines    Low Impact: 4           &lt;NA&gt;
-## 17               Rapid Declines Medium Impact: 6           &lt;NA&gt;
-## 1398        Negligible declines    Low Impact: 4           &lt;NA&gt;
-## 742  Slow, Significant Declines             &lt;NA&gt;           &lt;NA&gt;
-## 1527 Slow, Significant Declines Medium Impact: 6           &lt;NA&gt;
-## 363         Negligible declines    Low Impact: 4 Vulpes lagopus
-## 427  Slow, Significant Declines Medium Impact: 6           &lt;NA&gt;</code></pre>
+<pre><code>##       code                                                       title  timing
+## 1296 9.3.3                                   Herbicides and pesticides Ongoing
+## 534  9.3.3                                   Herbicides and pesticides Ongoing
+## 755  2.2.3                                    Scale Unknown/Unrecorded Ongoing
+## 776  2.3.4                                    Scale Unknown/Unrecorded Ongoing
+## 154  8.5.2                                               Named species  Future
+## 1399   5.1                      Hunting &amp; trapping terrestrial animals Ongoing
+## 1025   9.2                             Industrial &amp; military effluents Ongoing
+## 1019   8.1                  Invasive non-native/alien species/diseases Ongoing
+## 1148   6.1                                     Recreational activities Ongoing
+## 331    8.1 Invasive non-native/alien species/diseases (Neovison vison) Ongoing
+##                scope                   severity         score       invasive
+## 1296 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 534  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 755  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 776  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 154  Minority (&lt;50%)             Rapid Declines Low Impact: 4           &lt;NA&gt;
+## 1399 Minority (&lt;50%)                 No decline Low Impact: 4           &lt;NA&gt;
+## 1025 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 1019 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
+## 1148 Minority (&lt;50%)        Negligible declines Low Impact: 4           &lt;NA&gt;
+## 331             &lt;NA&gt;                       &lt;NA&gt; Low Impact: 3 Neovison vison</code></pre>
 <div id="task-3-analyse-major-threat-categories" class="section level2">
 <h2><span class="header-section-number">2.1</span> Task 3: analyse major threat categories</h2>
 <p>Now, I would like you to analyse the frequency of different threats in different time periods, in particular assessing how many species are facing threats in the different time periods and which threats are most frequent over all the species. The IUCN distinguishes threats that have occurred in the past (and are likely or unlikely to return, respectively), that are ongoing or that are likely to occur in the future. This information can be extracted from the red list threats table (the column “timing”). Thus, to solve this task, you first have to subset the table to the time period of interest, for example:</p>
