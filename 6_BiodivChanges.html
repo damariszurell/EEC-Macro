@@ -624,7 +624,7 @@ plot(rasterFromXYZ(subset(bird_dist,period==&#39;2008-11&#39;)[,c(&#39;EASTING&#
 </div>
 <div id="change-in-species-ranges" class="section level1">
 <h1><span class="header-section-number">2</span> Change in species ranges</h1>
-<p>For many questions, it also interesting to analyse global change impacts at the species level, to answer for example how many species are shifting northwards, how many species have contracting or expanding ranges.</p>
+<p>For many questions, it is also interesting to analyse global change impacts at the species level, to answer for example how many species are shifting northwards, how many species have contracting or expanding ranges.</p>
 <div id="task-3-quantify-species-range-changes" class="section level2">
 <h2><span class="header-section-number">2.1</span> Task 3: quantify species range changes</h2>
 <p>In the case of the gridded distribution data with equal-area grid cells, we can simply calculate range size difference by summing the number of cells. As example, we look at the sedge warbler (<em>Acrocephalus schoenobaenus</em>):</p>
@@ -661,9 +661,11 @@ acrocepha_rangelimits &lt;- data.frame(expand.grid(period=c(&#39;1968-72&#39;, &
 # Loop through all time periods and species to compute range size
 for (t in c(&#39;1968-72&#39;, &#39;1988-91&#39;, &#39;2008-11&#39;)) {
   for (sp in acrocepha_spp) {
+    # range centre
     rangecentre &lt;- mean(subset(bird_dist[bird_dist[,sp]==1,], period==t)[,&#39;NORTHING&#39;], na.rm=T)
     acrocepha_rangelimits[acrocepha_rangelimits$period==t &amp; acrocepha_rangelimits$species==sp, &#39;rangecentre&#39;] &lt;- rangecentre
     
+    # leading edge
     edge &lt;- quantile(subset(bird_dist[bird_dist[,sp]==1,], period==t)[,&#39;NORTHING&#39;], 0.95)
     acrocepha_rangelimits[acrocepha_rangelimits$period==t &amp; acrocepha_rangelimits$species==sp, &#39;leading_edge&#39;] &lt;- edge
   }

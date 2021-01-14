@@ -524,13 +524,22 @@ redlist_status &lt;- do.call(rbind,lapply(spp,FUN=function(sp){rl_search(sp, key
 <li>Are species with small ranges globally or in UK exhibting stronger population declines? Discuss.</li>
 </ul>
 </div>
+<div class="alert alert-warning">
+<p><strong>Hints on R commands and workflow</strong></p>
+<ul>
+<li>the global range size is contained in the data frame <code>redlist_status</code> (column “eoo_km2”)</li>
+<li>the UK range size needs to be calculated from the distribution data frame <code>bird_dist</code>. There, you have the cells occupied by each species, where each cell is 10x10 km in size. Adding the number of cells occupied per species can be done with the function <code>colSums()</code></li>
+<li>different data frames can be combined using <code>merge()</code> - we did that in practical 1 (section 6.2)</li>
+<li>boxplots can be be plotted using the base R function <code>boxplot()</code> or the <code>ggplot</code> package and the function <code>geom_boxplot()</code></li>
+</ul>
+</div>
 <p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 </div>
 <div id="task-2-map-distribution-of-threats" class="section level2">
 <h2><span class="header-section-number">1.2</span> Task 2: map distribution of threats</h2>
 <p>Next, I would like to analyse the distribution of threatened species. You find the relevant red list information in the data frame on the red list status. You have to combine this red list information with the distribution data. To this end, you will have to extract all species that belong to a specific threat category, then compute the species richness of these species per cell and map this.</p>
 <p>For example, you can extract all species that are classified as vulnerable:</p>
-<pre class="r"><code>subset(redlist_status,category==&#39;VU&#39;)$scientific_name</code></pre>
+<pre class="r"><code>(vu_spp &lt;- subset(redlist_status,category==&#39;VU&#39;)$scientific_name)</code></pre>
 <pre><code>##  [1] &quot;Podiceps auritus&quot;            &quot;Anser erythropus&quot;           
 ##  [3] &quot;Branta ruficollis&quot;           &quot;Aythya ferina&quot;              
 ##  [5] &quot;Polysticta stelleri&quot;         &quot;Clangula hyemalis&quot;          
@@ -545,6 +554,15 @@ redlist_status &lt;- do.call(rbind,lapply(spp,FUN=function(sp){rl_search(sp, key
 <li>Map species richness of all species belonging to one of the threatened categories (CR, EN, VU) and species richness of all species belonging to one of the non-threatened categories (NT, LC). Discuss the patterns.</li>
 </ul>
 </div>
+<div class="alert alert-warning">
+<p><strong>Hints on R commands and workflow</strong></p>
+<ul>
+<li>you have to identify the species that belong to a specific category, for example using the <code>subset()</code> function above</li>
+<li>as you remember from Practical 3, we can use the distribution data in the data frame <code>bird_dist</code> to calculate species richness using <code>rowSums()</code>. Importantly, you now have to calculate species richness only for those species that fall into a specific category. Thus, you have to chose those <code>bird_dist</code> columns that match your species subset. For name matching, try out the functions <code>intersect(vu_spp,spp)</code> or <code>spp %in% vu_spp</code>.</li>
+<li>remember that the <code>bird_dist</code> column names contain an underscore. As you have seen at the beginning of this practical, you can use the function <code>sub()</code> for exchanging underscore with blank space or vice versa.</li>
+<li>in Practical 3, you have already used the function <code>rasterFromXYZ()</code> to make a map from your species richness data frame.
+</div></li>
+</ul>
 <p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 </div>
@@ -585,28 +603,28 @@ redlist_threats &lt;- do.call(rbind,lapply(seq_len(length(spp)),FUN=function(i){
 </ul>
 <p>Here is an example of the kind of information in the table. For more details, please have a look at the IUCN website, e.g. the <a href="https://www.iucnredlist.org/species/22728432/132658315#conservation-actions">Balearic Shearwater</a> example, and at the <a href="https://www.iucnredlist.org/resources/threat-classification-scheme">Threat Classification Scheme</a>.</p>
 <pre class="r"><code>redlist_threats[sample(nrow(redlist_threats),10),-c(1:2)]</code></pre>
-<pre><code>##       code                                                       title  timing
-## 1296 9.3.3                                   Herbicides and pesticides Ongoing
-## 534  9.3.3                                   Herbicides and pesticides Ongoing
-## 755  2.2.3                                    Scale Unknown/Unrecorded Ongoing
-## 776  2.3.4                                    Scale Unknown/Unrecorded Ongoing
-## 154  8.5.2                                               Named species  Future
-## 1399   5.1                      Hunting &amp; trapping terrestrial animals Ongoing
-## 1025   9.2                             Industrial &amp; military effluents Ongoing
-## 1019   8.1                  Invasive non-native/alien species/diseases Ongoing
-## 1148   6.1                                     Recreational activities Ongoing
-## 331    8.1 Invasive non-native/alien species/diseases (Neovison vison) Ongoing
-##                scope                   severity         score       invasive
-## 1296 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 534  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 755  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 776  Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 154  Minority (&lt;50%)             Rapid Declines Low Impact: 4           &lt;NA&gt;
-## 1399 Minority (&lt;50%)                 No decline Low Impact: 4           &lt;NA&gt;
-## 1025 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 1019 Minority (&lt;50%) Slow, Significant Declines Low Impact: 5           &lt;NA&gt;
-## 1148 Minority (&lt;50%)        Negligible declines Low Impact: 4           &lt;NA&gt;
-## 331             &lt;NA&gt;                       &lt;NA&gt; Low Impact: 3 Neovison vison</code></pre>
+<pre><code>##       code                                                      title  timing
+## 361  5.4.4             Unintentional effects: (large scale) [harvest] Ongoing
+## 1156  11.1                              Habitat shifting &amp; alteration  Future
+## 267    5.4                     Fishing &amp; harvesting aquatic resources Ongoing
+## 1149   5.1                     Hunting &amp; trapping terrestrial animals Ongoing
+## 189   11.1                              Habitat shifting &amp; alteration  Future
+## 428  9.2.3                                    Type Unknown/Unrecorded Ongoing
+## 877  2.4.2                                     Industrial aquaculture Ongoing
+## 826  5.4.3 Unintentional effects: (subsistence/small scale) [harvest] Ongoing
+## 1157   5.1                     Hunting &amp; trapping terrestrial animals Ongoing
+## 1485   5.4                     Fishing &amp; harvesting aquatic resources Ongoing
+##                  scope                         severity         score invasive
+## 361    Minority (&lt;50%)              Negligible declines Low Impact: 4     &lt;NA&gt;
+## 1156 Majority (50-90%)                          Unknown       Unknown     &lt;NA&gt;
+## 267    Minority (&lt;50%)              Negligible declines Low Impact: 4     &lt;NA&gt;
+## 1149   Minority (&lt;50%)       Slow, Significant Declines Low Impact: 5     &lt;NA&gt;
+## 189       Whole (&gt;90%)                          Unknown          &lt;NA&gt;     &lt;NA&gt;
+## 428  Majority (50-90%)              Negligible declines Low Impact: 5     &lt;NA&gt;
+## 877    Minority (&lt;50%)       Slow, Significant Declines Low Impact: 5     &lt;NA&gt;
+## 826    Minority (&lt;50%)              Negligible declines Low Impact: 4     &lt;NA&gt;
+## 1157   Minority (&lt;50%)       Slow, Significant Declines Low Impact: 5     &lt;NA&gt;
+## 1485   Minority (&lt;50%) Causing/Could cause fluctuations Low Impact: 5     &lt;NA&gt;</code></pre>
 <div id="task-3-analyse-major-threat-categories" class="section level2">
 <h2><span class="header-section-number">2.1</span> Task 3: analyse major threat categories</h2>
 <p>Now, I would like you to analyse the frequency of different threats in different time periods, in particular assessing how many species are facing threats in the different time periods and which threats are most frequent over all the species. The IUCN distinguishes threats that have occurred in the past (and are likely or unlikely to return, respectively), that are ongoing or that are likely to occur in the future. This information can be extracted from the red list threats table (the column “timing”). Thus, to solve this task, you first have to subset the table to the time period of interest, for example:</p>
@@ -748,6 +766,15 @@ length(unique(past_threats$species))</code></pre>
 </ul>
 <p>Discuss your results.</p>
 </div>
+<div class="alert alert-warning">
+<p><strong>Hints on R commands and workflow</strong></p>
+<ul>
+<li>above, you have already subsetted the data frame <code>redlist_threats</code> to identify species that have experienced threats in the past, using the function <code>subset()</code>. Do this also for threats today, and threats in the future.</li>
+<li>the number of species facing a specific threat can be summarised with <code>table(past_threats$code)</code>.</li>
+<li>the function <code>sort()</code> is useful for ordering vectors</li>
+<li>the popularion trend is contained in data frame <code>redlist_status</code>. You have worked with this in task 1.
+</div></li>
+</ul>
 <pre><code>## [1] &quot;Past&quot;</code></pre>
 <pre><code>## 
 ##   8.5 8.5.2  11.2   8.1 8.1.2   9.3 
@@ -775,6 +802,14 @@ length(unique(past_threats$species))</code></pre>
 </ul>
 <p>Interpret.</p>
 </div>
+<div class="alert alert-warning">
+<p><strong>Hints on R commands and workflow</strong></p>
+<ul>
+<li>above, you have already identified the most important ongoing threats from the data frame <code>redlist_threats</code></li>
+<li>identify which species are facing these threats and calculate their species richness from <code>bird_dist</code> (see task 2 above)</li>
+<li>map species richness (see task 2 above)
+</div></li>
+</ul>
 <p><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-19-1.png" width="672" /><img src="5_SpeciesThreats_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
 </div>
 </div>
