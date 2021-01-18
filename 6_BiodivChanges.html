@@ -495,7 +495,7 @@ plot(rasterFromXYZ(birds_68[,c(&#39;EASTING&#39;,&#39;NORTHING&#39;,&#39;richnes
 <div id="task-1-map-species-richness-changes" class="section level2">
 <h2><span class="header-section-number">1.1</span> Task 1: map species richness changes</h2>
 <p>In order to compare species richness across time periods, you have to compute and map species richness for each sampling period. Then, you can calculate the differences in species richness between these periods.</p>
-<p>I give you a few hints how I made the plots below. I mapped species richness by first making stacks of species richness for the different time periods and then used the function <code>ssplot()</code> to produce the three adjacent maps. Of course you can also produce three seperate maps and put them next to each other by using the function <code>par(mfrow=c(1,3)</code>.</p>
+<p>I give you a few hints how I made the plots below. I mapped species richness by first making stacks of species richness for the different time periods (one species richness layer per time period) and then used the function <code>spplot()</code> to produce the three adjacent maps. Of course you can also produce three seperate maps and put them next to each other by using the function <code>par(mfrow=c(1,3)</code>.</p>
 <p><img src="6_BiodivChanges_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>For the plot of species richness differences, I define my own colour palette. First, you have to produce a raster that shows the difference in species richness between two periods. Let us assume you call this raster <code>change_richness</code>. Then you can procude the plot using this code:</p>
 <pre class="r"><code>#------
